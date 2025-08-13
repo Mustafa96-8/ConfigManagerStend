@@ -67,15 +67,9 @@ namespace ConfigManagerStend
                 FileInfo[] filesInfo = hdDirectoryInWhichToSearch.GetFiles("*" + ".dll");
                 if (filesInfo.Length == 0)
                 {
-                    MessageBox.Show("В указанной директории не найден файл .dll");
+                    MessageBox.Show("В указанной директории не найден/-ы файл/-ы .dll");
                     return;
                 }
-                if (filesInfo.Length > 1 )
-                {
-                    MessageBox.Show("В указанной директории несколько файлов .dll\nПроверьте директорию и очистите лишние файлы.\nАвтоматическая замена иначе невозможна.");
-                    return;
-                }
-
                 FileInfo[] metadataFilesInfo = hdDirectoryInWhichToSearch.GetFiles("metadata.json");
                 if (metadataFilesInfo.Length == 0)
                 {
@@ -88,11 +82,9 @@ namespace ConfigManagerStend
                     return;
                 }
 
-                FileInfo file = filesInfo[0];
                 FileInfo metadataFile = metadataFilesInfo[0];
 
                 parser.JsonFilePath = metadataFile.FullName;
-                parser.JsonFileName = file.Name.Replace(file.Extension,".json");
                 parser.DebugPath = dialog.FileName;
                 
                 directoryPathTextBox.Text = parser.DebugPath;
@@ -103,7 +95,6 @@ namespace ConfigManagerStend
         {
             if(string.IsNullOrEmpty(parser.DebugPath) ||
                string.IsNullOrEmpty(parser.JsonFilePath) ||
-               string.IsNullOrEmpty(parser.JsonFileName) ||
                string.IsNullOrEmpty(parser.JsonPathSave))
             {
                 MessageBox.Show("Невыбран исходный файл или путь до папки Debug");

@@ -36,6 +36,7 @@ namespace ConfigManagerStend.Logic
                 }
 
                 string modifiedJson = jsonNode!.ToJsonString();
+                parser.JsonFileName = jsonNode["Name"] + ".json";
 
                 // Записываем измененный JSON в новый файл
                 File.WriteAllText(Path.Combine(parser.JsonPathSave, "_" + parser.JsonFileName), modifiedJson);
