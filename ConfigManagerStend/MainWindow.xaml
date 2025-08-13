@@ -1,0 +1,28 @@
+﻿<Window x:Class="ConfigManagerStend.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ConfigManagerStend"
+        mc:Ignorable="d"
+        Title="Конфигуратор JSON файлов" Height="250" Width="450">
+    <Grid>
+        <StackPanel Margin="10">
+            <!-- Поле для выбора каталога -->
+            <Label Content="Путь до папки Debug:" Margin="0,10,0,0"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBox x:Name="directoryPathTextBox" Width="350" IsReadOnly="True"/>
+                <Button Content="Обзор..." Margin="5,0,0,0" Padding="2" Click="BrowseDirectory_Click"/>
+            </StackPanel>
+            <!-- Поле для выбора Стенда -->
+            <Label Content="Путь до папки Стенда:" Margin="0,10,0,0"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBox x:Name="BrowseStandTextBox" Width="350" IsReadOnly="True"/>
+                <Button Content="Обзор..." Margin="5,0,0,0" Padding="2" Click="BrowseStand_Click"/>
+            </StackPanel>
+            <Button x:Name="substitutionBtn" Width="200" Height="30" Content="Подменить файл"
+   Click="SubstitutionBtn_Click" HorizontalAlignment="Center" Margin="40" />
+        </StackPanel>
+       
+    </Grid>
+</Window>
