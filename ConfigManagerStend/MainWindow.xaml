@@ -5,23 +5,41 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ConfigManagerStend"
         mc:Ignorable="d"
-        Title="Конфигуратор JSON файлов" Height="250" Width="450">
+        Title="Конфигуратор JSON файлов" Height="250" Width="820" ResizeMode="NoResize">
     <Grid>
-        <StackPanel Margin="10">
-            <!-- Поле для выбора каталога -->
-            <Label Content="Путь до папки Debug:" Margin="0,10,0,0"/>
+        <StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBox x:Name="directoryPathTextBox" Width="350" IsReadOnly="True"/>
-                <Button Content="Обзор..." Margin="5,0,0,0" Padding="2" Click="BrowseDirectory_Click"/>
+                <StackPanel Orientation="Vertical" Margin="10">
+                    <!-- Поле для выбора Стенда -->
+                    <Label Content="Путь до папки Стенда:" Margin="0,10,0,0"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox x:Name="BrowseStandTextBox" Width="350" IsReadOnly="True"/>
+                        <Button Content="Обзор..." Margin="5,0,0,0" Padding="2" Click="BrowseStand_Click"/>
+                    </StackPanel>
+                    <!-- Поле для выбора каталога -->
+                    <Label Content="Путь до папки Debug для подмены:" Margin="0,10,0,0"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox x:Name="directoryPathTextBox" Width="350" IsReadOnly="True"/>
+                        <Button Content="Обзор..." Margin="5,0,0,0" Padding="2" Click="BrowseDirectory_Click"/>
+                    </StackPanel>
+                    <Button x:Name="substitutionBtn" Width="300" Height="30" Content="Подменить файл" 
+                    Click="SubstitutionBtn_Click" Margin="40" />
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Center">
+                    <Button x:Name="findModulesBtn" Width="300" Height="30" Content="Найти внешние модули подклчюенные к стенду" 
+                        Click="findModulesBtn_Click"/>
+                    <ListView Height="115" Margin="5" Width="350" x:Name="moduleList">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Название" DisplayMemberBinding="{Binding Name}" />
+                                <GridViewColumn Header="Дата и время изменения" DisplayMemberBinding="{Binding Date}" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Button x:Name="deleteModulesBtn" Width="300" Height="30" Content="Удалить выбранные модули с стенда" 
+                        Click="DeleteModulesBtn_Click" AutomationProperties.IsRequiredForForm="True"  />
+                </StackPanel>
             </StackPanel>
-            <!-- Поле для выбора Стенда -->
-            <Label Content="Путь до папки Стенда:" Margin="0,10,0,0"/>
-            <StackPanel Orientation="Horizontal">
-                <TextBox x:Name="BrowseStandTextBox" Width="350" IsReadOnly="True"/>
-                <Button Content="Обзор..." Margin="5,0,0,0" Padding="2" Click="BrowseStand_Click"/>
-            </StackPanel>
-            <Button x:Name="substitutionBtn" Width="200" Height="30" Content="Подменить файл"
-   Click="SubstitutionBtn_Click" HorizontalAlignment="Center" Margin="40" />
         </StackPanel>
        
     </Grid>

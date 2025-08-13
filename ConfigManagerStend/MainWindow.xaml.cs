@@ -20,6 +20,7 @@ namespace ConfigManagerStend
     public partial class MainWindow : Window
     {
         private ParserModel parser = new();
+        private List<ModuleModel> modules = new List<ModuleModel>();
         public MainWindow()
         {
             InitializeComponent();
@@ -44,7 +45,7 @@ namespace ConfigManagerStend
                     if (!string.IsNullOrEmpty(directoryPath))
                     {
                         directoryPath += "\\";
-                        BrowseStandTextBox.Text = directoryPath;
+                        BrowseStandTextBox.Text = dialog.FileName;
                         parser.JsonPathSave = directoryPath;
                     }
                 }
@@ -97,7 +98,7 @@ namespace ConfigManagerStend
                string.IsNullOrEmpty(parser.JsonFilePath) ||
                string.IsNullOrEmpty(parser.JsonPathSave))
             {
-                MessageBox.Show("Невыбран исходный файл или путь до папки Debug");
+                MessageBox.Show("Невыбран путь до Стенда или путь до папки с заменяемым Модулем");
                 return;
             }
 
@@ -105,6 +106,30 @@ namespace ConfigManagerStend
             Status result = logic.ParserFile(parser);
             string message = result.Message + result.SystemInfo;
             MessageBox.Show(message);
+        }
+
+        private void findModulesBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(parser.JsonPathSave))
+            {
+                MessageBox.Show("Не выбран путь до Стенда");
+                return;
+            }
+            bool isExist = File.Exists(parser.JsonPathSave);
+
+            DirectoryInfo hdDirectoryInWhichToSearch = new DirectoryInfo(parser.JsonPathSave);
+
+            FileInfo[] filesInfo = hdDirectoryInWhichToSearch.GetFiles("_*" + ".json");
+
+            modules = filesInfo.Select(f => new ModuleModel { Name = f.Name, Path = f.FullName, Date = f.LastWriteTime.ToString("G") }).ToList();
+            moduleList.ItemsSource = modules;
+        }
+
+        private void DeleteModulesBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var info = ManagerLogic.DeleteExternalModules(moduleList.SelectedItems);
+            findModulesBtn_Click(sender, e);
+            MessageBox.Show(info.Message + info.SystemInfo);
         }
     }
 }
