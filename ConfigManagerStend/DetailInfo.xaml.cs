@@ -1,0 +1,31 @@
+﻿using ConfigManagerStend.Infrastructure.Commands;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+
+namespace ConfigManagerStend
+{
+    /// <summary>
+    /// Interaction logic for DetailInfo.xaml
+    /// </summary>
+    public partial class DetailInfo : Window
+    {
+        public static ListView AllDitails;
+        public DetailInfo()
+        {
+            InitializeComponent();
+            DataContext = new DetailsInfoCommand();
+            AllDitails = ViewDetails;
+        }
+    }
+}

@@ -1,4 +1,7 @@
-﻿using ConfigManagerStend.Logic;
+﻿using ConfigManagerStend.Domain;
+using ConfigManagerStend.Domain.Entities;
+using ConfigManagerStend.Infrastructure.Commands;
+using ConfigManagerStend.Logic;
 using ConfigManagerStend.Models;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
@@ -23,6 +26,7 @@ namespace ConfigManagerStend
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new DetailsInfoCommand();
         }
 
         private void BrowseStand_Click(object sender, RoutedEventArgs e)

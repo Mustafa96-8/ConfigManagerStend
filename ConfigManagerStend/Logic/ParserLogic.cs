@@ -7,7 +7,7 @@ using System.Text.Json.Nodes;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.IO;
-using ConfigManagerStend.Enums;
+using ConfigManagerStend.Infrastructure.Enums;
 
 namespace ConfigManagerStend.Logic
 {
