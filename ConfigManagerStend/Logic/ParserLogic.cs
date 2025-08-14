@@ -1,19 +1,17 @@
 ﻿using ConfigManagerStend.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json.Nodes;
-using System.Text.Json;
-using System.Threading.Tasks;
 using System.IO;
 using ConfigManagerStend.Infrastructure.Enums;
+using System.Threading.Tasks;
+using ConfigManagerStend.Domain.Entities;
+using ConfigManagerStend.Domain.Predefineds;
+using ConfigManagerStend.Infrastructure.Services;
 
 namespace ConfigManagerStend.Logic
 {
     internal class ParserLogic
     {
-        public Status ParserFile(ParserModel parser)
+        public async Task<Status> ParserFile(ParserModel parser)
         {
             try
             {
@@ -36,16 +34,32 @@ namespace ConfigManagerStend.Logic
                 }
 
                 string modifiedJson = jsonNode!.ToJsonString();
-                parser.JsonFileName = jsonNode["Name"] + ".json";
+                parser.JsonFileName = "_" + jsonNode["Name"] + ".json";
 
                 // Записываем измененный JSON в новый файл
-                File.WriteAllText(Path.Combine(parser.JsonPathSave, "_" + parser.JsonFileName), modifiedJson);
+                File.WriteAllText(Path.Combine(parser.JsonPathSave, parser.JsonFileName), modifiedJson);
             }
             catch (Exception ex)
             {
                return Statuses.UnexpectedError(ex.Message);
             }
-            return Statuses.Ok();
+
+
+            return await SaveInDb(parser);
+        }
+
+        private async Task <Status> SaveInDb(ParserModel parser)
+        {
+                PdConfigStatus status = new();
+                Config config = new()
+                {
+                    NameStand = parser.NameStend,
+                    NameFile = parser.JsonFileName,
+                    FullPathFile = parser.JsonPathSave,
+                    StatusId = status.exist.Id,
+                };
+
+               return await DetailService.CreateData(config);
         }
     }
 }

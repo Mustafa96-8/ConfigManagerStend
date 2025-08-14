@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+
 namespace ConfigManagerStend
 {
     /// <summary>
@@ -21,11 +22,19 @@ namespace ConfigManagerStend
     public partial class DetailInfo : Window
     {
         public static ListView AllDitails;
+        private DetailsInfoCommand _detailsCommand;
         public DetailInfo()
         {
             InitializeComponent();
-            DataContext = new DetailsInfoCommand();
+            _detailsCommand = new DetailsInfoCommand();
+            DataContext = _detailsCommand;
+            _detailsCommand.LoadConfigsAsync().Wait();
             AllDitails = ViewDetails;
+        }
+
+        private void updateInfo_Click(object sender, RoutedEventArgs e)
+        {
+            _detailsCommand.UpdateDisplay();
         }
     }
 }

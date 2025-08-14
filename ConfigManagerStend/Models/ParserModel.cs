@@ -21,5 +21,10 @@
         /// Путь до файлов  debug
         /// </summary>
         public string DebugPath { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Имя стенда
+        /// </summary>
+        public string NameStend {  get; set; } = string.Empty;
     }
 }

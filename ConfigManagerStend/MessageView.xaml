@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ConfigManagerStend"
         mc:Ignorable="d"
-        Title="Сообщение" Height="100" Width="200">
+        Title="Сообщение" Height="115" Width="269">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />

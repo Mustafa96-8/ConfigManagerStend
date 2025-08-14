@@ -1,5 +1,7 @@
 ﻿using ConfigManagerStend.Domain.Entities;
 using ConfigManagerStend.Infrastructure.Services;
+using ConfigManagerStend.Models;
+using Microsoft.VisualBasic.Logging;
 using System.ComponentModel;
 using System.Windows;
 
@@ -31,28 +33,59 @@ namespace ConfigManagerStend.Infrastructure.Commands
         }
 
         //Вытягиваем данные из БД
-        private List<Config> configs = DetailService.GetAllConfigs();
+        private List<Config> configs;
         public List<Config> AllDitails 
         { 
             get { return configs; }
             set { configs = value; NotifyPropertyChanged(nameof(AllDitails)); }
         }
-
-
-
-        private void ShowMessageToUser(bool result)
+        // Конструктор или метод инициализации для загрузки данных
+        public async Task LoadConfigsAsync()
         {
+            AllDitails = await DetailService.GetAllConfigs();
+        }
 
-            if (result is true)
+        public static Config SelectedDitails { get;  set; }
+
+        private RelayCommand deleteDetailsCommand;
+        public RelayCommand DeleteDetailsCommand
+        {
+            get 
             {
-                MessageView msView = new("Успех");
-                OpenWindowCS(msView);
+                return deleteDetailsCommand ?? new(obj => 
+                {
+                    if (SelectedDitails is not null) 
+                    {
+                        Status result = DetailService.DeleteDetails(SelectedDitails.Id).Result;
+                        string message = result.Message + result.SystemInfo;
+                        ShowMessageToUser(message);
+                        UpdateDisplay();
+                        GlobalNullValueProp();
+                    }
+                
+                });
             }
-            else
-            {
-                MessageView msView = new("Ошибка");
+        }
+
+        internal void UpdateDisplay()
+        {
+            LoadConfigsAsync().Wait();
+            DetailInfo.AllDitails.ItemsSource = null;
+            DetailInfo.AllDitails.Items.Clear();
+            DetailInfo.AllDitails.ItemsSource = AllDitails;
+            DetailInfo.AllDitails.Items.Refresh();
+        }
+
+        private void GlobalNullValueProp()
+        {
+            SelectedDitails = null;
+        }
+
+
+        private void ShowMessageToUser(string message)
+        {
+                MessageView msView = new(message);
                 OpenWindowCS(msView);
-            }
         }
         private void OpenWindowCS(Window window)
         {

@@ -6,17 +6,24 @@
         xmlns:local="clr-namespace:ConfigManagerStend"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="Подробности" Height="450" Width="800">
+        Title="Подробности" Height="450" Width="1400">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" VerticalAlignment="Top" HorizontalAlignment="Center" Width="auto" Orientation="Horizontal">
-            <Button x:Name="updateInfo" Width="250" Height="30" Content="Обновить информацию" Padding="10,5"/>
+            <Button x:Name="updateInfo" Width="250" Height="30" Content="Обновить информацию" Padding="10,5" Click="updateInfo_Click"/>
         </StackPanel>
 
         <ListView Grid.Row="1" x:Name="ViewDetails" ItemsSource="{Binding AllDitails}" SelectedItem="{Binding SelectedDitails}" Width="auto"  FontSize="16">
+            <!-- Контекстное меню -->
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Удалить" Command="{Binding DeleteDetailsCommand}"/>
+                </ContextMenu>
+            </ListView.ContextMenu>
+
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Path=Id}"/>
