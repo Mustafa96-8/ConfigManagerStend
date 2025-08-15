@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ConfigManagerStend"
         mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
         Title="Конфигуратор JSON файлов" Height="250" Width="450">
     <Grid>
-        <StackPanel Margin="10">
+        <StackPanel Margin="10,10,10,4">
             <!-- Поле для выбора каталога -->
             <Label Content="Путь до папки Debug:" Margin="0,10,0,0"/>
             <StackPanel Orientation="Horizontal">
@@ -21,8 +22,9 @@
                 <Button Content="Обзор..." Margin="5,0,0,0" Padding="2" Click="BrowseStand_Click"/>
             </StackPanel>
             <Button x:Name="substitutionBtn" Width="200" Height="30" Content="Подменить файл"
-   Click="SubstitutionBtn_Click" HorizontalAlignment="Center" Margin="40" />
+   Click="SubstitutionBtn_Click"  Margin="0,10,5,0" Padding="10,5"/>
+            <Button x:Name="showDetails" Width="200" Height="30" Content="Показать подробности"
+Command="{Binding OpenShowDetails}" HorizontalAlignment="Center" Margin="0,10,5,0" Padding="10,5" />
         </StackPanel>
-       
     </Grid>
 </Window>

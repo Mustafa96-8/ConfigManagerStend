@@ -1,4 +1,6 @@
-﻿using System.Configuration;
+﻿using ConfigManagerStend.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
+using System.Configuration;
 using System.Data;
 using System.Windows;
 
@@ -9,6 +11,13 @@ namespace ConfigManagerStend
     /// </summary>
     public partial class App : Application
     {
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            DatabaseInitializer.InitializeDatabase();
+        }
     }
 
 }

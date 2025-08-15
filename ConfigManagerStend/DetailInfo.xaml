@@ -1,0 +1,41 @@
+﻿<Window x:Class="ConfigManagerStend.DetailInfo"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ConfigManagerStend"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="Подробности" Height="450" Width="1400">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" VerticalAlignment="Top" HorizontalAlignment="Center" Width="auto" Orientation="Horizontal">
+            <Button x:Name="updateInfo" Width="250" Height="30" Content="Обновить информацию" Padding="10,5" Click="updateInfo_Click"/>
+        </StackPanel>
+
+        <ListView Grid.Row="1" x:Name="ViewDetails" ItemsSource="{Binding AllDitails}" SelectedItem="{Binding SelectedDitails}" Width="auto"  FontSize="16">
+            <!-- Контекстное меню -->
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Показать в проводнике" Command="{Binding OpenInFloder}"/>
+                    <MenuItem Header="Удалить" Command="{Binding DeleteDetailsCommand}"/>
+                </ContextMenu>
+            </ListView.ContextMenu>
+
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Path=Id}"/>
+                    <GridViewColumn Header="Стенд" DisplayMemberBinding="{Binding Path=NameStand}"/>
+                    <GridViewColumn Header="Полный путь" DisplayMemberBinding="{Binding Path=FullPathFile}"/>
+                    <GridViewColumn Header="Имя файла" DisplayMemberBinding="{Binding Path=NameFile}"/>
+                    <GridViewColumn Header="Дата подмены" DisplayMemberBinding="{Binding Path=DateFileReplacement}"/>
+                    <GridViewColumn Header="Последняя проверка" DisplayMemberBinding="{Binding Path=DateFileVerifiedToExist}"/>
+                    <GridViewColumn Header="Статус" DisplayMemberBinding="{Binding Path=Status.NameStatus}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</Window>

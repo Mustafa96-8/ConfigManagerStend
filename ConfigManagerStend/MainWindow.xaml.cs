@@ -1,4 +1,7 @@
-﻿using ConfigManagerStend.Logic;
+﻿using ConfigManagerStend.Domain;
+using ConfigManagerStend.Domain.Entities;
+using ConfigManagerStend.Infrastructure.Commands;
+using ConfigManagerStend.Logic;
 using ConfigManagerStend.Models;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
@@ -6,6 +9,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -23,6 +27,7 @@ namespace ConfigManagerStend
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new DetailsInfoCommand();
         }
 
         private void BrowseStand_Click(object sender, RoutedEventArgs e)
@@ -32,6 +37,9 @@ namespace ConfigManagerStend
 
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
+                string[] parts = dialog.FileName.Split("\\");
+                parser.NameStend = parts[parts.Length - 1];
+
                 DirectoryInfo hdDirectoryInWhichToSearch = new DirectoryInfo($"{dialog.FileName}\\config\\");
                 try
                 {
@@ -91,7 +99,7 @@ namespace ConfigManagerStend
             }
         }
 
-        private void SubstitutionBtn_Click(object sender, RoutedEventArgs e)
+        private async void SubstitutionBtn_Click(object sender, RoutedEventArgs e)
         {
             if(string.IsNullOrEmpty(parser.DebugPath) ||
                string.IsNullOrEmpty(parser.JsonFilePath) ||
@@ -102,7 +110,7 @@ namespace ConfigManagerStend
             }
 
             ParserLogic logic = new();
-            Status result = logic.ParserFile(parser);
+            Status result = await logic.ParserFile(parser);
             string message = result.Message + result.SystemInfo;
             MessageBox.Show(message);
         }

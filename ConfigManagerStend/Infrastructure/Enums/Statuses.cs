@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ConfigManagerStend.Models;
 
-namespace ConfigManagerStend.Enums;
+namespace ConfigManagerStend.Infrastructure.Enums;
 public static class Statuses
 {
     public static Status FileNotFound(string info) => new("Файл не найден : ", info);
