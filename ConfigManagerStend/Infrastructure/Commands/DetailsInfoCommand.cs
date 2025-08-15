@@ -3,6 +3,7 @@ using ConfigManagerStend.Infrastructure.Services;
 using ConfigManagerStend.Models;
 using Microsoft.VisualBasic.Logging;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 
 namespace ConfigManagerStend.Infrastructure.Commands
@@ -63,6 +64,33 @@ namespace ConfigManagerStend.Infrastructure.Commands
                         GlobalNullValueProp();
                     }
                 
+                });
+            }
+        }
+
+        private RelayCommand openInFloder;
+        public RelayCommand OpenInFloder
+        {
+            get 
+            {
+                return openInFloder ?? new(obj =>
+                {
+                    if(SelectedDitails is not null)
+                    {
+                        string filePath = SelectedDitails.FullPathFile + SelectedDitails.NameFile;
+
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            Process.Start("explorer.exe", $"/select,\"{filePath}\"");
+                        }
+                        else
+                        {
+                            ShowMessageToUser("Файл не найден! Будет открыта папка последнего нахождения файла");
+                            Process.Start("explorer.exe", $"{SelectedDitails.FullPathFile}");
+                        }
+
+                        GlobalNullValueProp();
+                    }
                 });
             }
         }
