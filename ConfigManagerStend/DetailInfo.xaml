@@ -20,6 +20,7 @@
             <!-- Контекстное меню -->
             <ListView.ContextMenu>
                 <ContextMenu>
+                    <MenuItem Header="Показать в проводнике" Command="{Binding OpenInFloder}"/>
                     <MenuItem Header="Удалить" Command="{Binding DeleteDetailsCommand}"/>
                 </ContextMenu>
             </ListView.ContextMenu>
