@@ -1,5 +1,6 @@
 ﻿using ConfigManagerStend.Domain;
 using ConfigManagerStend.Domain.Entities;
+using ConfigManagerStend.Forms;
 using ConfigManagerStend.Infrastructure.Commands;
 using ConfigManagerStend.Logic;
 using ConfigManagerStend.Models;
@@ -30,6 +31,11 @@ namespace ConfigManagerStend
             DataContext = new DetailsInfoCommand();
         }
 
-        
+
+        private void openStandWin_Click(object sender, RoutedEventArgs e)
+        {
+            StendWindow sw = new();
+            sw.ShowDialog();
+        }
     }
 }

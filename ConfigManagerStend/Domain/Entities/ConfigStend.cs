@@ -2,46 +2,67 @@
 
 namespace ConfigManagerStend.Domain.Entities
 {
+    /// <summary>
+    /// Таблица. Конфиги стендов
+    /// </summary>
     internal class ConfigStend
     {
-        public int Id { get; set; } 
+        public int Id { get; set; }
 
         /// <summary>
-        /// ключ для связки стенда
+        /// Наименование конфига
         /// </summary>
-        [ForeignKey(nameof(Stand))]
-        public required int StandId { get; set; }
-
-        public required Stand Stand { get; set; }
-        /// <summary>
-        /// Полный путь файла
-        /// </summary>
-        public required string FullPathFile { get; set; }
+        public required string NameConfig { get; set; }
 
         /// <summary>
-        /// Наименование файла
+        /// Наименование приложение
         /// </summary>
-        public required string FileName { get; set; }
+        public required string Appn { get; set; }
+      
+        /// <summary>
+        /// Расположение стенда
+        /// </summary>
+        public required string PathStend { get; set; }
 
         /// <summary>
-        /// Дата подмены
+        /// Порт
         /// </summary>
-        public DateTime DateFileReplacement { get; set; } = DateTime.Now;
+        public int PortA { get; set; }
 
         /// <summary>
-        /// Послендяя проверка существования файла
+        /// Владелец БД
         /// </summary>
-        public DateTime? DateFileVerifiedToExist { get; set; } = null;
+        public required string DbOwner { get; set; }
 
         /// <summary>
-        /// Статус ID
+        /// PlatformHostDir
         /// </summary>
-        [ForeignKey(nameof(Status))]
-        public int StatusId { get; set; }
+        public required string PlatformHostDir { get; set; }
 
         /// <summary>
-        /// Статус
+        /// BoxSettingDir
         /// </summary>
-        public ConfigStatus? Status { get; set; }
+        public required string BoxSettingDir { get; set; }
+
+        /// <summary>
+        /// Репо Id
+        /// </summary>
+        [ForeignKey(nameof(BuildDefinition))]
+        public int RepoId { get; set; }
+
+        /// <summary>
+        /// Репо
+        /// </summary>
+        public BuildDefinition? BuildDefinition { get; set; }
+
+        /// <summary>
+        /// Наименование ветки
+        /// </summary>
+        public required string BranchName { get; set; }
+
+        /// <summary>
+        /// Настройки БД (NO - не создавать БД, Recreate - создать/пересоздать БД)
+        /// </summary>
+        public required string SettingDb {  get; set; }
     }
 }

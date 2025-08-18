@@ -9,6 +9,9 @@ namespace ConfigManagerStend.Domain
     {
         internal DbSet<Stand> Stands { get; set; }
         internal DbSet<ConfigStatus> ConfigStatuses { get; set; }
+        internal DbSet<Config> Configs { get; set; }
+        internal DbSet<TeamProject> TeamProjects { get; set; }
+        internal DbSet<BuildDefinition> BuildDefinitions { get; set; }
         internal DbSet<ConfigStend> ConfigStends { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -20,6 +23,8 @@ namespace ConfigManagerStend.Domain
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<ConfigStatus>().HasData(new PdConfigStatus().ConfigStatuses);
+            modelBuilder.Entity<TeamProject>().HasData(new PdTeamProject().Projects);
+            modelBuilder.Entity<BuildDefinition>().HasData(new PdBuildDefinition().Repos);
         }
     }
 }
