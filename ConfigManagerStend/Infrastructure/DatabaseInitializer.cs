@@ -16,6 +16,18 @@ namespace ConfigManagerStend.Infrastructure
                     context.AddRange(new PdConfigStatus().ConfigStatuses);
                     context.SaveChanges();
                 }
+
+                if(!context.TeamProjects.Any())
+                {
+                    context.TeamProjects.AddRange(new PdTeamProject().Projects);
+                    context.SaveChanges();
+                }
+
+                if (!context.BuildDefinitions.Any())
+                {
+                    context.BuildDefinitions.AddRange(new PdBuildDefinition().Repos);
+                    context.SaveChanges();
+                }
             }
         }
     }

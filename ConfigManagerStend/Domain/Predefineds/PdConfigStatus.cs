@@ -3,7 +3,7 @@
 namespace ConfigManagerStend.Domain.Predefineds
 {
     /// <summary>
-    /// Предопределенные данные
+    /// Предопределенные данные. Статус подмены
     /// </summary>
     internal class PdConfigStatus
     {

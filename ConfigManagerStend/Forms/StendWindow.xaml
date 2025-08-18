@@ -1,0 +1,129 @@
+﻿<Window x:Class="ConfigManagerStend.Forms.StendWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ConfigManagerStend.Forms"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="Разворачивание Стендов (beta)" Height="680" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="200"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="100"/>
+        </Grid.RowDefinitions>
+
+        <!-- Основное содержимое формы -->
+        <Border Grid.Column="0" Grid.Row="0" Background="LightBlue">
+            <StackPanel Grid.Column="0" Margin="0 0 10 0">
+                <GroupBox Header="Основные параметры">
+                    <StackPanel>
+                        <!-- Имя приложения -->
+                        <TextBlock Text="Имя приложения (appn)"/>
+                        <TextBox x:Name="AppNameTxt" Padding="2" Margin="0 0 0 10"/>
+
+                        <!-- Поле для выбора Стенда -->
+                        <Label Content="Путь куда сохраниться стенд:"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox x:Name="BrowseStandTextBox" Width="350" IsReadOnly="True"/>
+                            <Button Content="Обзор..." Margin="5,0,0,0" Padding="2"/>
+                        </StackPanel>
+
+                        <!-- Порт -->
+                        <TextBlock Text="Порт (portA)"/>
+                        <TextBox x:Name="PortTxt" Text="10666" Padding="2" Margin="0 0 0 10"/>
+
+                        <!-- Владелец БД -->
+                        <TextBlock Text="Владелец БД (dbOwner) Точно такоеже как appn только КАПСОМ"/>
+                        <TextBox x:Name="DbOwnerTxt" Padding="2" Margin="0 0 0 10"/>
+
+                        <!-- PlatformHostDir -->
+                        <TextBlock Text="PlatformHostDir (Дополнить)"/>
+                        <TextBox x:Name="PlatformHostDir" Text="PlatformHostDir" Padding="2" Margin="0 0 0 10"/>
+
+                        <!-- BoxSettingsDir -->
+                        <TextBlock Text="BoxSettingsDir (Дополнить)"/>
+                        <TextBox x:Name="BoxSettingsDir" Text="BoxSettingsDir" Padding="2" Margin="0 0 0 10"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Параметры CI/CD" Margin="0 10 0 0">
+                    <StackPanel>
+                        <!-- Проект -->
+                        <TextBlock Text="Team Project (Проект)"/>
+                        <ComboBox x:Name="TeamProjectTxt" SelectedIndex="0">
+                            <ComboBoxItem Content="Titul"/>
+                            <ComboBoxItem Content="Delo"/>
+                            <ComboBoxItem Content="Nadzor2025"/>
+                        </ComboBox>
+
+                        <!-- Репозиторий -->
+                        <TextBlock Text="Build Definition (Репозиторий)"/>
+                        <ComboBox x:Name="BuildDefinitionTxt" SelectedIndex="0">
+                            <ComboBoxItem Content="WebSrc"/>
+                            <ComboBoxItem Content="Reports"/>
+                            <ComboBoxItem Content="И ТД"/>
+                        </ComboBox>
+
+                        <!-- Имя ветки -->
+                        <TextBlock Text="Branch Name (Имя ветки)"/>
+                        <TextBox x:Name="BranchNameTxt" Text="dev/26.1" Padding="2" Margin="0 0 0 10"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Настройки БД (Только ПГ)" Margin="0 10 0 0">
+                    <StackPanel>
+                        <TextBlock Text="CreateDB Option"/>
+                        <ComboBox x:Name="CreateDbCombo" SelectedIndex="0">
+                            <ComboBoxItem Content="NO"/>
+                            <ComboBoxItem Content="Recreate"/>
+                        </ComboBox>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </Border>
+
+        <!-- Панель кнопок внизу -->
+        <Border Grid.Column="0" Grid.Row="1" Background="LightGreen">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Первые две кнопки в одной строке -->
+                <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button x:Name="saveConfigStend" Content="Сохранить конфиг" 
+                            Margin="10 20 10 10" Padding="10 5" FontWeight="Bold" Width="150"/>
+                    <Button x:Name="loadConfigStend" Content="Загрузить конфиг" 
+                            Margin="10 20 10 10" Padding="10 5" FontWeight="Bold" Width="150"/>
+                </StackPanel>
+
+                <!-- Кнопка генерации скрипта во всю ширину -->
+                <Button Grid.Row="1" x:Name="generateScrip" Content="Сгенерировать скрипт" 
+                        Margin="10 0 10 10" Padding="10 5" FontWeight="Bold"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+            </Grid>
+        </Border>
+
+        <!-- Правый сайдбар -->
+        <Border Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Background="LightSalmon">
+            <StackPanel>
+                <GroupBox Header="Управление конфигами">
+                    <Button x:Name="myConfigs" Content="Мои конфиги" Margin="10"/>
+                </GroupBox>
+                <GroupBox Header="Справочники">
+                    <StackPanel>
+                        <Button x:Name="project" Content="Проекты" Margin="10"/>
+                        <Button x:Name="repo" Content="Репозитории" Margin="10"/>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
