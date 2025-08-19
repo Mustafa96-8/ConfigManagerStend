@@ -119,8 +119,8 @@
                 </GroupBox>
                 <GroupBox Header="Справочники">
                     <StackPanel>
-                        <Button x:Name="project" Content="Проекты" Margin="10"/>
-                        <Button x:Name="repo" Content="Репозитории" Margin="10"/>
+                        <Button x:Name="project" Content="Проекты" Margin="10" Command="{Binding OpenShowProject}"/>
+                        <Button x:Name="repo" Content="Репозитории" Margin="10" Command="{Binding OpenShowRepos}"/>
                     </StackPanel>
                 </GroupBox>
             </StackPanel>
