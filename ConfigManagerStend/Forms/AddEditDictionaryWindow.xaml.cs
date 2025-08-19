@@ -3,6 +3,7 @@ using ConfigManagerStend.Infrastructure.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,19 +18,20 @@ using System.Windows.Shapes;
 namespace ConfigManagerStend.Forms
 {
     /// <summary>
-    /// Interaction logic for DictionaryWindow.xaml
+    /// Interaction logic for AddEditDictionaryWindow.xaml
     /// </summary>
-    public partial class DictionaryWindow : Window
+    public partial class AddEditDictionaryWindow : Window
     {
-        public static ListView AllProjects;
-        public static ListView AllRepos;
         private readonly DictionaryType _typeWindow;
-      
+        private readonly WorkMode _workMode;
+
         private DictionaryCommand _dictionaryCommand;
-        public DictionaryWindow(DictionaryType typeWindow)
+       
+        public AddEditDictionaryWindow(DictionaryType typeWindow, WorkMode workMode)
         {
             InitializeComponent();
             _typeWindow = typeWindow;
+            _workMode = workMode;
             _dictionaryCommand = new DictionaryCommand(_typeWindow);
             DataContext = _dictionaryCommand;
             SettingViewWindow();
@@ -39,20 +41,16 @@ namespace ConfigManagerStend.Forms
         {
             switch (_typeWindow)
             {
-                
+
                 case DictionaryType.Project:
-                    this.Title = "Словарь. Проекты";
-                    ProjectStackPanel.Visibility = Visibility.Visible;
-                    _dictionaryCommand.LoadProjectsAsync().Wait();
-                    AllProjects = ViewProjects;
-                    addWind.Content = "Добавить новый проект";
+                    this.Title = (_workMode == WorkMode.CreateMode) ? "Словарь. Добавить проект" : "Словарь. Изменить проект";
+                    ProjectArea.Visibility = Visibility.Visible;
+                   
                     break;
                 case DictionaryType.Repos:
-                    this.Title = "Словарь. Репозитории";
-                    ReposStackPanel.Visibility = Visibility.Visible;
-                    _dictionaryCommand.LoadReposAsync().Wait();
-                    AllRepos = ViewRepos;
-                    addWind.Content = "Добавить новый репозиторий";
+                    this.Title = (_workMode == WorkMode.CreateMode) ? "Словарь. Добавить репозиторий" : "Словарь. Изменить репозиторий";
+                    ReposArea.Visibility = Visibility.Visible;
+                    _dictionaryCommand.LoadProjectsAsync().Wait();
                     break;
                 default:
                     this.Title = "Словарь. Ошибка формирования окна !!!";
