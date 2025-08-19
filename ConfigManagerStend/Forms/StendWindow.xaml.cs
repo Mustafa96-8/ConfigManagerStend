@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConfigManagerStend.Infrastructure.Commands;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,7 @@ namespace ConfigManagerStend.Forms
         public StendWindow()
         {
             InitializeComponent();
+            DataContext = new StendWindCommand();
         }
     }
 }
