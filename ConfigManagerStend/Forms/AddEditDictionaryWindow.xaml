@@ -1,0 +1,35 @@
+﻿<Window x:Class="ConfigManagerStend.Forms.AddEditDictionaryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ConfigManagerStend.Forms"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="AddEditDictionaryWindow" Height="253" Width="400"
+        Name="AddEditWnd"
+        >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="40" />
+        </Grid.RowDefinitions>
+
+        <StackPanel x:Name="ProjectArea" Grid.Row="0" Visibility="Hidden">
+            <Label>Наименование проекта:</Label>
+            <TextBox x:Name="tb_projName" Text="{Binding NameProject}" Padding="2"/>
+        </StackPanel>
+
+        <StackPanel x:Name="ReposArea" Grid.Row="0"  Visibility="Hidden">
+            <Label>Проект:</Label>
+            <ComboBox x:Name="tb_prj" ItemsSource="{Binding AllProjects}" SelectedItem="{Binding SelectListProject}" DisplayMemberPath="NameProject"></ComboBox>
+            <Label>Наименование репозитория:</Label>
+            <TextBox x:Name="tb_repName" Text="{Binding NameRepo}" Padding="2"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2">
+            <Button x:Name="addEdditBtn" Command="{Binding AddEdditBtn}" CommandParameter="{Binding ElementName=AddEditWnd}" Content="Сохранить"/> 
+        </StackPanel>
+
+    </Grid>
+</Window>
