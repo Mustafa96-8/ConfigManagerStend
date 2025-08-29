@@ -50,7 +50,7 @@ namespace ConfigManagerStend.Infrastructure.Services
         /// <param name="id">Id исходного Репо</param>
         /// <param name="name">Новое наименование Репо</param>
         /// <param name="project">проект</param>
-        public static async Task<Status> EditProjectAsync(int id, string name, TeamProject project)
+        public static async Task<Status> EditRepoAsync(int id, string name, TeamProject project)
         {
             using (var db = new AppDbContext())
             {
@@ -68,6 +68,34 @@ namespace ConfigManagerStend.Infrastructure.Services
                     await db.SaveChangesAsync();
                 }
                 catch (Exception ex) { return Statuses.UnexpectedError("Не удалось сохранить в бд\n" + ex.Message); }
+
+                return Statuses.Ok();
+            }
+        }
+
+
+        /// <summary>
+        /// Удаление репо
+        /// </summary>
+        /// <param name="id">Id репо</param>
+        public static async Task<Status> DeleteRepoAsync(int id)
+        {
+            using (var db = new AppDbContext())
+            {
+                if (id <= 0) { return Statuses.UnexpectedError("Неверно передан id для удаления"); }
+
+                BuildDefinition? repo = await db.BuildDefinitions.Where(x => x.Id == id).FirstOrDefaultAsync();
+                if (repo is null) { return Statuses.UnexpectedError("Запись в БД не найдена"); }
+
+                bool isExistInConfSt= await db.ConfigStends.AnyAsync(x => x.RepoId == id);
+                if (isExistInConfSt) { return Statuses.UnexpectedError("Запись не может быть удалена, так как с ней связан Конфиг стенда"); }
+
+                try
+                {
+                    db.BuildDefinitions.Remove(repo);
+                    await db.SaveChangesAsync();
+                }
+                catch (Exception ex) { return Statuses.UnexpectedError("Не удалось удалить запись: \n" + ex); }
 
                 return Statuses.Ok();
             }

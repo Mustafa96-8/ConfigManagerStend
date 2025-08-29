@@ -30,7 +30,7 @@ namespace ConfigManagerStend.Forms
         {
             InitializeComponent();
             _typeWindow = typeWindow;
-            _dictionaryCommand = new DictionaryCommand(_typeWindow);
+            _dictionaryCommand = new DictionaryCommand(_typeWindow,null);
             DataContext = _dictionaryCommand;
             SettingViewWindow();
         }
