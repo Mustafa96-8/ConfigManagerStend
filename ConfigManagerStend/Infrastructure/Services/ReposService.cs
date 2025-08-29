@@ -19,6 +19,15 @@ namespace ConfigManagerStend.Infrastructure.Services
                 return await db.BuildDefinitions.Include(p=>p.TeamProject).ToListAsync();
             }
         }
+
+        public static async Task<List<BuildDefinition>> GetReposWithProjectAsync(int projectId)
+        {
+            using (var db = new AppDbContext())
+            {
+                return await db.BuildDefinitions.Where(x=>x.ProjectId == projectId).ToListAsync();
+            }
+        }
+
         /// <summary>
         ///  Добавление нового Репо
         /// </summary>
