@@ -31,7 +31,7 @@
                         <Label Content="Путь куда сохраниться стенд:"/>
                         <StackPanel Orientation="Horizontal">
                             <TextBox x:Name="BrowseStandTextBox" Width="350" IsReadOnly="True"/>
-                            <Button Content="Обзор..." Margin="5,0,0,0" Padding="2"/>
+                            <Button  x:Name="BrowseStandBtn" Content="Обзор..." Margin="5,0,0,0" Padding="2" Click="BrowseStandBtn_Click"/>
                         </StackPanel>
 
                         <!-- Порт -->
@@ -56,19 +56,19 @@
                     <StackPanel>
                         <!-- Проект -->
                         <TextBlock Text="Team Project (Проект)"/>
-                        <ComboBox x:Name="TeamProjectTxt" SelectedIndex="0">
-                            <ComboBoxItem Content="Titul"/>
-                            <ComboBoxItem Content="Delo"/>
-                            <ComboBoxItem Content="Nadzor2025"/>
-                        </ComboBox>
+                        <ComboBox x:Name="TeamProjectTxt" 
+                                  ItemsSource="{Binding AllProjects}" 
+                                  SelectedItem="{Binding SelectedProject}" 
+                                  DisplayMemberPath="NameProject" 
+                                  SelectionChanged="TeamProjectTxt_SelectionChanged"/>
 
                         <!-- Репозиторий -->
                         <TextBlock Text="Build Definition (Репозиторий)"/>
-                        <ComboBox x:Name="BuildDefinitionTxt" SelectedIndex="0">
-                            <ComboBoxItem Content="WebSrc"/>
-                            <ComboBoxItem Content="Reports"/>
-                            <ComboBoxItem Content="И ТД"/>
-                        </ComboBox>
+                        <ComboBox x:Name="BuildDefinitionTxt"  
+                                  ItemsSource="{Binding Repos}" 
+                                  SelectedItem="{Binding SelectedRepo}"  
+                                  DisplayMemberPath="NameRepo"/>
+
 
                         <!-- Имя ветки -->
                         <TextBlock Text="Branch Name (Имя ветки)"/>
