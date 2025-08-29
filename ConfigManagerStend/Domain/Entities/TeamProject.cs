@@ -3,7 +3,7 @@
     /// <summary>
     /// Таблица проектов
     /// </summary>
-    internal class TeamProject
+    public class TeamProject
     {
         public int Id { get; set; }
 

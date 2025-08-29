@@ -70,5 +70,33 @@ namespace ConfigManagerStend.Infrastructure.Services
             }
         }
 
+        /// <summary>
+        /// Удаление проекта
+        /// </summary>
+        /// <param name="id">Id проекта</param>
+        public static async Task<Status> DeleteProjectAsync(int id)
+        {
+            using (var db = new AppDbContext())
+            {
+                if (id <= 0) { return Statuses.UnexpectedError("Неверно передан id для удаления"); }
+
+                TeamProject? prj = await db.TeamProjects.Where(x => x.Id == id).FirstOrDefaultAsync();
+                if(prj is null) { return Statuses.UnexpectedError("Запись в БД не найдена"); }
+
+                bool isExistInRepo = await db.BuildDefinitions.AnyAsync(x=>x.ProjectId == id);
+                if (isExistInRepo) { return Statuses.UnexpectedError("Запись не может быть удалена, так как с ней связан Репозиторий"); }
+
+                try
+                {
+                    db.TeamProjects.Remove(prj);
+                    await db.SaveChangesAsync();
+                }
+                catch (Exception ex) { return Statuses.UnexpectedError("Не удалось удалить запись: \n" + ex); }
+
+                return Statuses.Ok();
+            }
+        }
+
+
     }
 }

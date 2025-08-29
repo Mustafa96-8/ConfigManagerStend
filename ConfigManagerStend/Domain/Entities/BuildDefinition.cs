@@ -5,7 +5,7 @@ namespace ConfigManagerStend.Domain.Entities
     /// <summary>
     /// Таблица. Репозитории проекта
     /// </summary>
-    internal class BuildDefinition
+    public class BuildDefinition
     {
         public int Id { get; set; }
 

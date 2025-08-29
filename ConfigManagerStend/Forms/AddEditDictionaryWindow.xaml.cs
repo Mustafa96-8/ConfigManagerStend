@@ -1,4 +1,5 @@
-﻿using ConfigManagerStend.Infrastructure.Commands;
+﻿using ConfigManagerStend.Domain.Entities;
+using ConfigManagerStend.Infrastructure.Commands;
 using ConfigManagerStend.Infrastructure.Enums;
 using System;
 using System.Collections.Generic;
@@ -24,17 +25,33 @@ namespace ConfigManagerStend.Forms
     {
         private readonly DictionaryType _typeWindow;
         private readonly WorkMode _workMode;
-
         private DictionaryCommand _dictionaryCommand;
-       
-        public AddEditDictionaryWindow(DictionaryType typeWindow, WorkMode workMode)
+
+
+        public AddEditDictionaryWindow(DictionaryType typeWindow, WorkMode workMode, TeamProject? project=null, BuildDefinition? repo = null)
         {
             InitializeComponent();
             _typeWindow = typeWindow;
             _workMode = workMode;
-            _dictionaryCommand = new DictionaryCommand(_typeWindow);
+            _dictionaryCommand = new DictionaryCommand(_typeWindow, _workMode);
+
+
             DataContext = _dictionaryCommand;
             SettingViewWindow();
+
+            if(_workMode == WorkMode.EditMode)
+            {
+                if (_typeWindow == DictionaryType.Project)
+                {
+                    DictionaryCommand.SelectedProject = project;
+                    DictionaryCommand.NameProject = project.NameProject;
+                }
+                else if (_typeWindow == DictionaryType.Repos)
+                {
+                    DictionaryCommand.SelectedRepo = repo;
+                    DictionaryCommand.NameRepo = repo.NameRepo;
+                }
+            }
         }
 
         private void SettingViewWindow()
