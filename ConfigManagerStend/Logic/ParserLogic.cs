@@ -51,7 +51,7 @@ namespace ConfigManagerStend.Logic
         private async Task <Status> SaveInDb(ParserModel parser)
         {
             PdConfigStatus status = new();
-            ExternalModule config = new()
+            ConfigStend config = new()
             {
                 FileName = parser.JsonFileName,
                 FullPathFile = parser.JsonPathSave,

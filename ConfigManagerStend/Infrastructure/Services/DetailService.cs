@@ -137,14 +137,14 @@ namespace ConfigManagerStend.Infrastructure.Services
         /// <summary>
         /// Получение всех записей по стенду
         /// </summary>
-        public static async Task<List<ExternalModule>> GetAllConfigs(int standId)
+        public static async Task<List<ConfigStend>> GetAllConfigs(int standId)
         {
             using (var db = new AppDbContext())
             {
-                List<ExternalModule> configs = await db.ExternalModules.Include(x => x.Status).Where(x => x.StandId == standId).ToListAsync();
+                List<ConfigStend> configs = await db.ConfigStends.Include(x => x.Status).Where(x => x.StandId == standId).ToListAsync();
                 PdConfigStatus status = new();
 
-                foreach (ExternalModule config in configs)
+                foreach (ConfigStend config in configs)
                 {
                     if (File.Exists(config.FullPathFile + config.FileName))
                     {
@@ -159,7 +159,7 @@ namespace ConfigManagerStend.Infrastructure.Services
 
                 try
                 {
-                    db.ExternalModules.UpdateRange(configs);
+                    db.ConfigStends.UpdateRange(configs);
                     await db.SaveChangesAsync();
                 }
                 catch { return new(); }
@@ -172,7 +172,7 @@ namespace ConfigManagerStend.Infrastructure.Services
         /// Добавление информации в БД
         /// </summary>
         /// <param name="config">конфиг</param>
-        public static async Task<Status> CreateModule(ExternalModule module)
+        public static async Task<Status> CreateModule(ConfigStend module)
         {
             if (module is null) { return Statuses.UnexpectedError("Модель пустая"); }
 
@@ -183,7 +183,7 @@ namespace ConfigManagerStend.Infrastructure.Services
                     var stand = await db.Stands.FirstOrDefaultAsync(s => module.StandId == s.Id);
                     stand.Modules.Add(module);
                     db.Update(stand);
-                    await db.ExternalModules.AddAsync(module);
+                    await db.ConfigStends.AddAsync(module);
                     await db.SaveChangesAsync();
                 }
             }
@@ -198,7 +198,7 @@ namespace ConfigManagerStend.Infrastructure.Services
 
             using (var db = new AppDbContext())
             {
-                ExternalModule? config = await db.ExternalModules.FirstOrDefaultAsync(x => x.Id == id);
+                ConfigStend? config = await db.ConfigStends.FirstOrDefaultAsync(x => x.Id == id);
                 if (config is null) { return Statuses.DbError("Не удалось найти запись в БД"); }
 
                 if (File.Exists(config.FullPathFile + config.FileName))
@@ -214,7 +214,7 @@ namespace ConfigManagerStend.Infrastructure.Services
 
                 try
                 {
-                   db.ExternalModules.Remove(config);
+                   db.ConfigStends.Remove(config);
                    await db.SaveChangesAsync();
                 }
                 catch(Exception ex) { return Statuses.UnexpectedError(ex.Message); }

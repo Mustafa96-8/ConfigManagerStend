@@ -34,8 +34,8 @@ namespace ConfigManagerStend.Infrastructure.Commands
         }
 
         //Вытягиваем данные из БД
-        private List<ExternalModule> configs;
-        public List<ExternalModule> AllDitails 
+        private List<ConfigStend> configs;
+        public List<ConfigStend> AllDitails 
         { 
             get { return configs; }
             set { configs = value; NotifyPropertyChanged(nameof(AllDitails)); }
@@ -46,7 +46,7 @@ namespace ConfigManagerStend.Infrastructure.Commands
             AllDitails = await DetailService.GetAllConfigs(standId);
         }
 
-        public static ExternalModule SelectedDitails { get;  set; }
+        public static ConfigStend SelectedDitails { get;  set; }
 
         private RelayCommand deleteDetailsCommand;
         public RelayCommand DeleteDetailsCommand

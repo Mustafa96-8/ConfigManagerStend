@@ -9,7 +9,7 @@ namespace ConfigManagerStend.Domain
     {
         internal DbSet<Stand> Stands { get; set; }
         internal DbSet<ConfigStatus> ConfigStatuses { get; set; }
-        internal DbSet<ExternalModule> ExternalModules { get; set; }
+        internal DbSet<ConfigStend> ConfigStends { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

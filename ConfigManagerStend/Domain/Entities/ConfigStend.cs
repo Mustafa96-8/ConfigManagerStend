@@ -2,7 +2,7 @@
 
 namespace ConfigManagerStend.Domain.Entities
 {
-    internal class ExternalModule
+    internal class ConfigStend
     {
         public int Id { get; set; } 
 
