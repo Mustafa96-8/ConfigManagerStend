@@ -6,25 +6,33 @@
         xmlns:local="clr-namespace:ConfigManagerStend"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="Конфигуратор JSON файлов" Height="250" Width="450">
+        Title="Конфигуратор JSON файлов" Height="400" Width="800">
     <Grid>
-        <StackPanel Margin="10,10,10,4">
-            <!-- Поле для выбора каталога -->
-            <Label Content="Путь до папки Debug:" Margin="0,10,0,0"/>
-            <StackPanel Orientation="Horizontal">
-                <TextBox x:Name="directoryPathTextBox" Width="350" IsReadOnly="True"/>
-                <Button Content="Обзор..." Margin="5,0,0,0" Padding="2" Click="BrowseDirectory_Click"/>
+        <StackPanel Margin="10,10,10,10" Orientation="Horizontal">
+            <StackPanel Orientation="Vertical" Width="250">
+                <Label FontSize="24" Content="Стенды:" Margin="0,10,0,0"/>
+                <!-- Поле для выбора каталога -->
+                <ListView Margin="5" Height="180">
+                    
+                </ListView>
+                <Button Content="Добавить новый" Margin="5" Padding="2"/>
+                <Button Content="Удалить" Margin="5" Padding="2"/>
             </StackPanel>
-            <!-- Поле для выбора Стенда -->
-            <Label Content="Путь до папки Стенда:" Margin="0,10,0,0"/>
-            <StackPanel Orientation="Horizontal">
-                <TextBox x:Name="BrowseStandTextBox" Width="350" IsReadOnly="True"/>
-                <Button Content="Обзор..." Margin="5,0,0,0" Padding="2" Click="BrowseStand_Click"/>
+            <StackPanel Orientation="Vertical" Width="250">
+                <Label FontSize="24" Content="Информация:" Margin="0,10,0,0"/>
+                <Label x:Name="standName" FontSize="16" FontWeight="SemiBold" Margin="2"/>
+                <Label Content="Версия стенда:" Margin="2"/>
+                <Label x:Name="standVersion"  Margin="2"/>
+                <Label Content="DbProvider стенда:" Margin="2"/>
+                <Label x:Name ="standDbProvider" Margin="2"/>
             </StackPanel>
-            <Button x:Name="substitutionBtn" Width="200" Height="30" Content="Подменить файл"
-   Click="SubstitutionBtn_Click"  Margin="0,10,5,0" Padding="10,5"/>
-            <Button x:Name="showDetails" Width="200" Height="30" Content="Показать подробности"
-Command="{Binding OpenShowDetails}" HorizontalAlignment="Center" Margin="0,10,5,0" Padding="10,5" />
+            <StackPanel Orientation="Vertical">
+                <Button x:Name="showDetails" Width="auto" Height="30" Content="Показать подробности" 
+                            Command="{Binding OpenShowDetails}" HorizontalAlignment="Center" Margin="0,10,5,0" Padding="10,5" />
+                <Button x:Name="showDetails" Width="auto" Height="30" Content="Показать подробности" 
+                            Command="{Binding AddNewModule}" HorizontalAlignment="Center" Margin="0,10,5,0" Padding="10,5" />
+            </StackPanel>
+            
         </StackPanel>
     </Grid>
 </Window>

@@ -1,17 +1,19 @@
 ﻿using ConfigManagerStend.Domain.Entities;
 using ConfigManagerStend.Domain.Predefineds;
 using Microsoft.EntityFrameworkCore;
+using System.Windows.Forms;
 
 namespace ConfigManagerStend.Domain
 {
     internal class AppDbContext : DbContext
     {
+        internal DbSet<Stand> Stands { get; set; }
         internal DbSet<ConfigStatus> ConfigStatuses { get; set; }
-        internal DbSet<Config> Configs { get; set; }
+        internal DbSet<ExternalModule> ExternalModules { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source=ConfMangerStend.db");
+            optionsBuilder.UseSqlite("Data Source = ..\\ConfMangerStend.db");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -9,6 +9,8 @@ namespace ConfigManagerStend.Infrastructure.Enums;
 public static class Statuses
 {
     public static Status FileNotFound(string info) => new("Файл не найден : ", info);
+
+    public static Status DbError(string info) => new("Ошибка в работе с базой данных: ", info);
     
     public static Status UnexpectedError(string info) => new("Неизвестная ошибка : ", info);
 

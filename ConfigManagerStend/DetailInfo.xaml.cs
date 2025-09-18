@@ -23,12 +23,12 @@ namespace ConfigManagerStend
     {
         public static ListView AllDitails;
         private DetailsInfoCommand _detailsCommand;
-        public DetailInfo()
+        public DetailInfo(int standId)
         {
             InitializeComponent();
             _detailsCommand = new DetailsInfoCommand();
             DataContext = _detailsCommand;
-            _detailsCommand.LoadConfigsAsync().Wait();
+            _detailsCommand.LoadConfigsAsync(standId).Wait();
             AllDitails = ViewDetails;
         }
 

@@ -2,15 +2,17 @@
 
 namespace ConfigManagerStend.Domain.Entities
 {
-    internal class Config
+    internal class ExternalModule
     {
         public int Id { get; set; } 
 
         /// <summary>
-        /// Наименование стенда
+        /// ключ для связки стенда
         /// </summary>
-        public required string NameStand { get; set; }
+        [ForeignKey(nameof(Stand))]
+        public required int StandId { get; set; }
 
+        public required Stand Stand { get; set; }
         /// <summary>
         /// Полный путь файла
         /// </summary>
@@ -19,7 +21,7 @@ namespace ConfigManagerStend.Domain.Entities
         /// <summary>
         /// Наименование файла
         /// </summary>
-        public required string NameFile { get; set; }
+        public required string FileName { get; set; }
 
         /// <summary>
         /// Дата подмены

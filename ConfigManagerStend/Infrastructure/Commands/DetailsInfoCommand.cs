@@ -9,6 +9,7 @@ namespace ConfigManagerStend.Infrastructure.Commands
 {
     internal class DetailsInfoCommand : INotifyPropertyChanged
     {
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(String propName)
         {
@@ -26,26 +27,26 @@ namespace ConfigManagerStend.Infrastructure.Commands
             {
                 return _openShowDetails ?? new(obj =>
                 {
-                    DetailInfo window = new();
+                    DetailInfo window = new(standId);
                     window.ShowDialog();
                 });
             }
         }
 
         //Вытягиваем данные из БД
-        private List<Config> configs;
-        public List<Config> AllDitails 
+        private List<ExternalModule> configs;
+        public List<ExternalModule> AllDitails 
         { 
             get { return configs; }
             set { configs = value; NotifyPropertyChanged(nameof(AllDitails)); }
         }
         // Конструктор или метод инициализации для загрузки данных
-        public async Task LoadConfigsAsync()
+        public async Task LoadConfigsAsync(int standId)
         {
-            AllDitails = await DetailService.GetAllConfigs();
+            AllDitails = await DetailService.GetAllConfigs(standId);
         }
 
-        public static Config SelectedDitails { get;  set; }
+        public static ExternalModule SelectedDitails { get;  set; }
 
         private RelayCommand deleteDetailsCommand;
         public RelayCommand DeleteDetailsCommand
@@ -69,7 +70,7 @@ namespace ConfigManagerStend.Infrastructure.Commands
 
         internal void UpdateDisplay()
         {
-            LoadConfigsAsync().Wait();
+            LoadConfigsAsync(int ).Wait();
             DetailInfo.AllDitails.ItemsSource = null;
             DetailInfo.AllDitails.Items.Clear();
             DetailInfo.AllDitails.ItemsSource = AllDitails;

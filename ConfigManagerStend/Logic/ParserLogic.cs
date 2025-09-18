@@ -50,16 +50,15 @@ namespace ConfigManagerStend.Logic
 
         private async Task <Status> SaveInDb(ParserModel parser)
         {
-                PdConfigStatus status = new();
-                Config config = new()
-                {
-                    NameStand = parser.NameStend,
-                    NameFile = parser.JsonFileName,
-                    FullPathFile = parser.JsonPathSave,
-                    StatusId = status.exist.Id,
-                };
+            PdConfigStatus status = new();
+            ExternalModule config = new()
+            {
+                FileName = parser.JsonFileName,
+                FullPathFile = parser.JsonPathSave,
+                StatusId = status.exist.Id,
+            };
 
-               return await DetailService.CreateData(config);
+            return await DetailService.CreateModule(config);
         }
     }
 }
