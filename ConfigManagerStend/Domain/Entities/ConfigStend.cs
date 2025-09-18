@@ -5,7 +5,7 @@ namespace ConfigManagerStend.Domain.Entities
     /// <summary>
     /// Таблица. Конфиги стендов
     /// </summary>
-    internal class ConfigStend
+    public class ConfigStend
     {
         public int Id { get; set; }
 

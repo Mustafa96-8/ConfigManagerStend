@@ -34,6 +34,7 @@ namespace ConfigManagerStend.Forms
         private void SettingsView()
         {
             _stendWindCommand.LoadProjectsAsync().Wait();
+            _stendWindCommand.LoadDbSettings();
         }
 
         private void TeamProjectTxt_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -49,6 +50,7 @@ namespace ConfigManagerStend.Forms
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 BrowseStandTextBox.Text = dialog.FileName;
+                StendWindCommand.PathStend = dialog.FileName;  
             }
         }
     }
