@@ -15,7 +15,7 @@
         <StackPanel Grid.Row="0">
             <Button x:Name="openStandWin" Content="Разворачивание Стендов (beta)" Click="openStandWin_Click" />
         </StackPanel>
-        <StackPanel Margin="10,10,10,10" Orientation="Horizontal">
+        <StackPanel Grid.Row="1" Margin="10,10,10,10" Orientation="Horizontal">
             <StackPanel Orientation="Vertical" Width="250">
                 <Label FontSize="24" Content="Стенды:" Margin="0,10,0,0"/>
                 <!-- Поле для выбора каталога -->
@@ -36,7 +36,7 @@
             <StackPanel Orientation="Vertical">
                 <Button x:Name="showDetails" Width="auto" Height="30" Content="Показать подробности" 
                             Command="{Binding OpenShowDetails}" HorizontalAlignment="Center" Margin="0,10,5,0" Padding="10,5" />
-                <Button x:Name="showDetails" Width="auto" Height="30" Content="Показать подробности" 
+                <Button x:Name="AddNewModule" Width="auto" Height="30" Content="Показать подробности" 
                             Command="{Binding AddNewModule}" HorizontalAlignment="Center" Margin="0,10,5,0" Padding="10,5" />
             </StackPanel>
             

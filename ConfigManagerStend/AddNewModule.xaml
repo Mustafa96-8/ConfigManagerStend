@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ConfigManagerStend"
         mc:Ignorable="d"
-        Title="AddNewModule" Height="200" Width="440">
+        Title="Добавить новый модуль" Height="140" Width="440">
     <Grid>
         <StackPanel Margin="10,10,10,10" >
             <Label Content="Путь до папки Debug:" Margin="0,10,0,0"/>
@@ -13,13 +13,7 @@
                 <TextBox x:Name="directoryPathTextBox" Width="350" IsReadOnly="True"/>
                 <Button Content="Обзор..." Margin="5,0,0,0" Padding="2" Click="BrowseDirectory_Click"/>
             </StackPanel>
-            <!-- Поле для выбора Стенда -->
-            <Label Content="Путь до папки Стенда:" Margin="0,10,0,0"/>
-            <StackPanel Orientation="Horizontal">
-                <TextBox x:Name="BrowseStandTextBox" Width="350" IsReadOnly="True"/>
-                <Button Content="Обзор..." Margin="5,0,0,0" Padding="2" Click="BrowseStand_Click"/>
-            </StackPanel>
-            <Button x:Name="substitutionBtn" Width="200" Height="30" Content="Добавить новый" 
+            <Button x:Name="substitutionBtn" Width="200" Height="30" Content="Добавить" 
                             Click="SubstitutionBtn_Click"  Margin="0,10,5,0" Padding="10,5"/>
         </StackPanel>
     </Grid>

@@ -11,10 +11,21 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace ConfigManagerStend.Infrastructure.Services
 {
-    internal class DetailService
+    internal class StandService
     {
         /// <summary>
         /// Получение всех стендов
+        /// </summary>
+        public static async Task<List<Stand>> GetAllStands()
+        {
+            using (var db = new AppDbContext())
+            {
+                return await db.Stands.Include(s => s.Modules).ThenInclude(m => m.Status).ToListAsync();
+            }
+        }
+
+        /// <summary>
+        /// Обновление всех стендов
         /// </summary>
         public static async Task<List<Stand>> UpdateAllStands()
         {
@@ -71,21 +82,6 @@ namespace ConfigManagerStend.Infrastructure.Services
         }
 
         /// <summary>
-        /// Получение всех стендов
-        /// </summary>
-        public static async Task<List<Stand>> GetAllStands()
-        {
-            using (var db = new AppDbContext())
-            {
-                List<Stand> standList = await db.Stands.Include(s => s.Modules).ThenInclude(m => m.Status).ToListAsync();
-                PdConfigStatus status = new();
-
-                return standList;
-            }
-        }
-
-
-        /// <summary>
         /// Добавление стенда в систему
         /// </summary>
         public static async Task<Status> CreateStands(string path)
@@ -134,93 +130,5 @@ namespace ConfigManagerStend.Infrastructure.Services
             }
         }
 
-        /// <summary>
-        /// Получение всех записей по стенду
-        /// </summary>
-        public static async Task<List<ConfigStend>> GetAllConfigs(int standId)
-        {
-            using (var db = new AppDbContext())
-            {
-                List<ConfigStend> configs = await db.ConfigStends.Include(x => x.Status).Where(x => x.StandId == standId).ToListAsync();
-                PdConfigStatus status = new();
-
-                foreach (ConfigStend config in configs)
-                {
-                    if (File.Exists(config.FullPathFile + config.FileName))
-                    {
-                        config.StatusId = status.exist.Id;
-                    }
-                    else
-                    {
-                        config.StatusId = status.unexist.Id;
-                    }
-                    config.DateFileVerifiedToExist = DateTime.Now;
-                }
-
-                try
-                {
-                    db.ConfigStends.UpdateRange(configs);
-                    await db.SaveChangesAsync();
-                }
-                catch { return new(); }
-
-                return configs;
-            }
-        }
-
-        /// <summary>
-        /// Добавление информации в БД
-        /// </summary>
-        /// <param name="config">конфиг</param>
-        public static async Task<Status> CreateModule(ConfigStend module)
-        {
-            if (module is null) { return Statuses.UnexpectedError("Модель пустая"); }
-
-            try
-            {
-                using (var db = new AppDbContext())
-                {
-                    var stand = await db.Stands.FirstOrDefaultAsync(s => module.StandId == s.Id);
-                    stand.Modules.Add(module);
-                    db.Update(stand);
-                    await db.ConfigStends.AddAsync(module);
-                    await db.SaveChangesAsync();
-                }
-            }
-            catch (Exception ex) { return Statuses.DbError(ex.Message); }
-
-            return Statuses.Ok();
-        }
-
-        public static async Task<Status> DeleteDetails(int id)
-        {
-            if (id == 0) { return Statuses.UnexpectedError("Неправильный Id"); }
-
-            using (var db = new AppDbContext())
-            {
-                ConfigStend? config = await db.ConfigStends.FirstOrDefaultAsync(x => x.Id == id);
-                if (config is null) { return Statuses.DbError("Не удалось найти запись в БД"); }
-
-                if (File.Exists(config.FullPathFile + config.FileName))
-                {
-                    try
-                    {
-                        File.Delete(config.FullPathFile + config.FileName);
-
-                    }
-                    catch(Exception ex) { return Statuses.UnexpectedError(ex.Message); }
-                 
-                }
-
-                try
-                {
-                   db.ConfigStends.Remove(config);
-                   await db.SaveChangesAsync();
-                }
-                catch(Exception ex) { return Statuses.UnexpectedError(ex.Message); }
-            }
-
-            return Statuses.Ok();   
-        }
     }
 }

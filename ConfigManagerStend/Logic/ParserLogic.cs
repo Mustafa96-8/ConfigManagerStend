@@ -58,7 +58,7 @@ namespace ConfigManagerStend.Logic
                 StatusId = status.exist.Id,
             };
 
-            return await DetailService.CreateModule(config);
+            return await StandService.CreateModule(config);
         }
     }
 }

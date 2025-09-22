@@ -20,6 +20,7 @@ namespace ConfigManagerStend.Infrastructure.Commands
             }
         }
 
+
         //Открыть окно "Подробно"
         private RelayCommand _openShowDetails;
         public RelayCommand OpenShowDetails
@@ -35,16 +36,29 @@ namespace ConfigManagerStend.Infrastructure.Commands
         }
 
         //Вытягиваем данные из БД
-        private List<ConfigStend> configs;
-        public List<ConfigStend> AllDitails 
+        private List<ExternalModule> allModules;
+        public List<ExternalModule> AllModules 
         { 
-            get { return configs; }
-            set { configs = value; NotifyPropertyChanged(nameof(AllDitails)); }
+            get { return modules; }
+            set { modules = value; NotifyPropertyChanged(nameof(AllModules)); }
         }
+
         // Конструктор или метод инициализации для загрузки данных
         public async Task LoadConfigsAsync(int standId)
         {
-            AllDitails = await DetailService.GetAllConfigs(standId);
+            AllModules = await StandService.GetAllModules(standId);
+        }
+
+        private List<Stand> stands;
+        public List<Stand> Stands 
+        { 
+            set { stands = value; NotifyPropertyChanged(nameof(Stands)); }
+            get { return stands; } 
+        } 
+
+        private async Task<string> AddNewStand(string path)
+        {
+
         }
 
         public static ConfigStend SelectedDitails { get;  set; }
@@ -58,7 +72,7 @@ namespace ConfigManagerStend.Infrastructure.Commands
                 {
                     if (SelectedDitails is not null) 
                     {
-                        Status result = DetailService.DeleteDetails(SelectedDitails.Id).Result;
+                        Status result = StandService.DeleteDetails(SelectedDitails.Id).Result;
                         string message = result.Message + result.SystemInfo;
                         ShowMessageToUser(message);
                         UpdateDisplay();
@@ -98,10 +112,10 @@ namespace ConfigManagerStend.Infrastructure.Commands
 
         internal void UpdateDisplay()
         {
-            LoadConfigsAsync(int ).Wait();
+            //LoadConfigsAsync().Wait();
             DetailInfo.AllDitails.ItemsSource = null;
             DetailInfo.AllDitails.Items.Clear();
-            DetailInfo.AllDitails.ItemsSource = AllDitails;
+            //DetailInfo.AllDitails.ItemsSource = AllDitails;
             DetailInfo.AllDitails.Items.Refresh();
         }
 

@@ -9,7 +9,7 @@ namespace ConfigManagerStend.Domain
     {
         internal DbSet<Stand> Stands { get; set; }
         internal DbSet<ConfigStatus> ConfigStatuses { get; set; }
-        internal DbSet<Config> Configs { get; set; }
+        internal DbSet<ExternalModule> ExternalModules { get; set; }
         internal DbSet<TeamProject> TeamProjects { get; set; }
         internal DbSet<BuildDefinition> BuildDefinitions { get; set; }
         internal DbSet<ConfigStend> ConfigStends { get; set; }

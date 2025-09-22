@@ -24,45 +24,14 @@ namespace ConfigManagerStend;
 public partial class AddNewModule : Window
 {
     private ParserModel parser = new();
+    private DetailsInfoCommand _detailsCommand;
 
     public AddNewModule()
     {
-        InitializeComponent(); 
-        DataContext = new DetailsInfoCommand();
+        InitializeComponent();
+        _detailsCommand = new DetailsInfoCommand();
     }
-    private void BrowseStand_Click(object sender, RoutedEventArgs e)
-    {
-        CommonOpenFileDialog dialog = new();
-        dialog.IsFolderPicker = true;
 
-        if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
-        {
-            string[] parts = dialog.FileName.Split("\\");
-            parser.NameStend = parts[parts.Length - 1];
-
-            DirectoryInfo hdDirectoryInWhichToSearch = new DirectoryInfo($"{dialog.FileName}\\config\\");
-            try
-            {
-                DirectoryInfo[] ConfigDir = hdDirectoryInWhichToSearch.GetDirectories("*" + "-delosrv");
-
-                FileInfo? fileInfo = new FileInfo(ConfigDir[0].FullName + "\\a\\Settings");
-
-                string? directoryPath = fileInfo.FullName;
-
-                if (!string.IsNullOrEmpty(directoryPath))
-                {
-                    directoryPath += "\\";
-                    BrowseStandTextBox.Text = directoryPath;
-                    parser.JsonPathSave = directoryPath;
-                }
-            }
-            catch
-            {
-                BrowseStandTextBox.Text = "Файл или директория не найдены";
-                return;
-            }
-        }
-    }
     private void BrowseDirectory_Click(object sender, RoutedEventArgs e)
     {
         CommonOpenFileDialog dialog = new();

@@ -46,7 +46,7 @@ namespace ConfigManagerStend.Domain.Entities
         /// <summary>
         /// Подключенные модули
         /// </summary>
-        public List<ConfigStend> Modules { get; set; } = new List<ConfigStend>();
+        public List<ExternalModule> Modules { get; set; } = new List<ExternalModule>();
 
         public Stand(string path)
         {
