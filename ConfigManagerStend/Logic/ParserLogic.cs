@@ -11,7 +11,7 @@ namespace ConfigManagerStend.Logic
 {
     internal class ParserLogic
     {
-        public async Task<Status> ParserFile(ParserModel parser)
+        public async Task<Status> ParserFile(ParserModel parser,Stand stand)
         {
             try
             {
@@ -35,7 +35,7 @@ namespace ConfigManagerStend.Logic
 
                 string modifiedJson = jsonNode!.ToJsonString();
                 parser.JsonFileName = "_" + jsonNode["Name"] + ".json";
-
+                parser.JsonPathSave = stand.SrvAFolderPath + "\\Settings\\";
                 // Записываем измененный JSON в новый файл
                 File.WriteAllText(Path.Combine(parser.JsonPathSave, parser.JsonFileName), modifiedJson);
             }
@@ -45,20 +45,22 @@ namespace ConfigManagerStend.Logic
             }
 
 
-            return await SaveInDb(parser);
+            return await SaveInDb(parser, stand);
         }
 
-        private async Task <Status> SaveInDb(ParserModel parser)
+        private async Task <Status> SaveInDb(ParserModel parser, Stand stand)
         {
             PdConfigStatus status = new();
-            ConfigStend config = new()
+            ExternalModule module = new()
             {
+                Stand = stand,
+                StandId = stand.Id,
                 FileName = parser.JsonFileName,
                 FullPathFile = parser.JsonPathSave,
                 StatusId = status.exist.Id,
             };
 
-            return await StandService.CreateModule(config);
+            return await ModuleService.CreateModule(module);
         }
     }
 }

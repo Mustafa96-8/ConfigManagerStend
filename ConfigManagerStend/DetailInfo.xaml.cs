@@ -28,7 +28,7 @@ namespace ConfigManagerStend
             InitializeComponent();
             _detailsCommand = new DetailsInfoCommand();
             DataContext = _detailsCommand;
-            _detailsCommand.LoadConfigsAsync(standId).Wait();
+            _detailsCommand.LoadModulesAsync().Wait();
             AllDitails = ViewDetails;
         }
 

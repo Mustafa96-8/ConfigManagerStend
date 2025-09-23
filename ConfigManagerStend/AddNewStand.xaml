@@ -7,15 +7,16 @@
         mc:Ignorable="d"
         Title="Добавить новый стенд" Height="140" Width="440">
     <Grid>
-        <StackPanel Margin="10,10,10,10" >
+        <StackPanel Margin="10,10,10,5" >
             <!-- Поле для выбора Стенда -->
-            <Label Content="Путь до папки Стенда:" Margin="0,10,0,0"/>
+            <Label Content="Путь до папки Стенда:"/>
             <StackPanel Orientation="Horizontal">
                 <TextBox x:Name="BrowseStandTextBox" Width="350" IsReadOnly="True"/>
                 <Button Content="Обзор..." Margin="5,0,0,0" Padding="2" Click="BrowseStand_Click"/>
             </StackPanel>
             <Button x:Name="addStandBtn" IsEnabled="False" Width="200" Height="30" Content="Добавить" 
-                            Click="addStandBtn_Click"  Margin="0,10,5,0" Padding="10,5"/>
+                            Click="addStandBtn_Click"  Margin="0,10,0,0"/>
+            <Label x:Name="ResultLabel"/>
         </StackPanel>
     </Grid>
 </Window>

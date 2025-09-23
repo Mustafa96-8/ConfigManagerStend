@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using ConfigManagerStend.Infrastructure.Enums;
 
 namespace ConfigManagerStend;
 /// <summary>
@@ -24,10 +25,10 @@ public partial class AddNewStand : Window
     private bool isValid = false;
     private DetailsInfoCommand _detailsCommand;
 
-    public AddNewStand()
+    internal AddNewStand(DetailsInfoCommand detailsInfoCommand)
     {
         InitializeComponent();
-        _detailsCommand = new DetailsInfoCommand();
+        _detailsCommand = detailsInfoCommand;
     }
     /// <summary>
     /// Обработка процесса выбора директории для добавления стенда
@@ -67,9 +68,9 @@ public partial class AddNewStand : Window
         }
     }
 
-    private void addStandBtn_Click(object sender, RoutedEventArgs e)
+    private async void addStandBtn_Click(object sender, RoutedEventArgs e)
     {
-        _detailsCommand.AddNewStand(BrowseStandTextBox.Text);
-        this.Close();
+        var result = await _detailsCommand.AddNewStand(BrowseStandTextBox.Text);
+        ResultLabel.Content = result.Message;
     }
 }

@@ -45,20 +45,20 @@ namespace ConfigManagerStend.Infrastructure.Services
             return Statuses.Ok();
         }
 
-        public static async Task<Status> DeleteDetails(int id)
+        public static async Task<Status> DeleteModule(int id)
         {
             if (id == 0) { return Statuses.UnexpectedError("Неправильный Id"); }
 
             using (var db = new AppDbContext())
             {
-                ConfigStend? config = await db.ConfigStends.FirstOrDefaultAsync(x => x.Id == id);
-                if (config is null) { return Statuses.DbError("Не удалось найти запись в БД"); }
+                ExternalModule? module = await db.ExternalModules.FirstOrDefaultAsync(x => x.Id == id);
+                if (module is null) { return Statuses.DbError("Не удалось найти запись в БД"); }
 
-                if (File.Exists(config.FullPathFile + config.FileName))
+                if (File.Exists(module.FullPathFile + module.FileName))
                 {
                     try
                     {
-                        File.Delete(config.FullPathFile + config.FileName);
+                        File.Delete(module.FullPathFile + module.FileName);
 
                     }
                     catch(Exception ex) { return Statuses.UnexpectedError(ex.Message); }
@@ -67,7 +67,7 @@ namespace ConfigManagerStend.Infrastructure.Services
 
                 try
                 {
-                   db.ConfigStends.Remove(config);
+                   db.ExternalModules.Remove(module);
                    await db.SaveChangesAsync();
                 }
                 catch(Exception ex) { return Statuses.UnexpectedError(ex.Message); }

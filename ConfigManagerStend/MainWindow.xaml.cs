@@ -24,12 +24,25 @@ namespace ConfigManagerStend
 {
     public partial class MainWindow : Window
     {
+        private DetailsInfoCommand _detailsCommand;
+
         private ParserModel parser = new();
-        public MainWindow()
+
+        public static ListView AllModules = new ();
+
+        public static ListView AllStands = new();
+
+        public MainWindow() 
         {
             InitializeComponent();
-            DataContext = new DetailsInfoCommand();
+            _detailsCommand = new DetailsInfoCommand();
+            DataContext = _detailsCommand;
+            _detailsCommand.LoadStandsAsync().Wait();
+            AllModules = ModuleListView;
+            AllStands = StandListView;
         }
+
+
 
 
         private void openStandWin_Click(object sender, RoutedEventArgs e)

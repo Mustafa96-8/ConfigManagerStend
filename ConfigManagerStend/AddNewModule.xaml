@@ -7,14 +7,15 @@
         mc:Ignorable="d"
         Title="Добавить новый модуль" Height="140" Width="440">
     <Grid>
-        <StackPanel Margin="10,10,10,10" >
-            <Label Content="Путь до папки Debug:" Margin="0,10,0,0"/>
+        <StackPanel Margin="10,10,10,5" >
+            <Label Content="Путь до папки Debug:"/>
             <StackPanel Orientation="Horizontal">
                 <TextBox x:Name="directoryPathTextBox" Width="350" IsReadOnly="True"/>
                 <Button Content="Обзор..." Margin="5,0,0,0" Padding="2" Click="BrowseDirectory_Click"/>
             </StackPanel>
             <Button x:Name="substitutionBtn" Width="200" Height="30" Content="Добавить" 
-                            Click="SubstitutionBtn_Click"  Margin="0,10,5,0" Padding="10,5"/>
+                            Click="SubstitutionBtn_Click"  Margin="5"/>
+            <Label x:Name="ResultLabel"/>
         </StackPanel>
     </Grid>
 </Window>

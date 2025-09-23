@@ -95,16 +95,17 @@ namespace ConfigManagerStend.Infrastructure.Services
 
                 DirectoryInfo hdDirectoryInWhichToSearch = new DirectoryInfo($"{path}\\config\\");
                 DirectoryInfo[] ConfigDir = hdDirectoryInWhichToSearch.GetDirectories("*" + "-delosrv");
+                
+                var aFolder = ConfigDir[0].FullName + "\\a\\";
 
-                if (!File.Exists(ConfigDir[0].FullName + "\\a\\appsettings.json"))
-                    return Statuses.FileNotFound(ConfigDir[0].FullName + "\\a\\appsettings.json");
+                if (!File.Exists(aFolder + "appsettings.json"))
+                    return Statuses.FileNotFound(aFolder + "appsettings.json");
 
-                Stand stand = new(path);
-
+                Stand stand = new(path, aFolder);
                 try
                 {
                     // Читаем содержимое файла настроек
-                    string jsonContent = File.ReadAllText(ConfigDir[0].FullName + "\\a\\appsettings.json");
+                    string jsonContent = File.ReadAllText(aFolder + "appsettings.json");
 
                     // Парсим JSON
                     var jsonObject = JsonNode.Parse(jsonContent)?.AsObject();

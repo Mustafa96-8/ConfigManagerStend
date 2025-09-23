@@ -26,10 +26,10 @@ public partial class AddNewModule : Window
     private ParserModel parser = new();
     private DetailsInfoCommand _detailsCommand;
 
-    public AddNewModule()
+    internal AddNewModule(DetailsInfoCommand detailsInfoCommand)
     {
         InitializeComponent();
-        _detailsCommand = new DetailsInfoCommand();
+        _detailsCommand = detailsInfoCommand;
     }
 
     private void BrowseDirectory_Click(object sender, RoutedEventArgs e)
@@ -71,16 +71,13 @@ public partial class AddNewModule : Window
     private async void SubstitutionBtn_Click(object sender, RoutedEventArgs e)
     {
         if (string.IsNullOrEmpty(parser.DebugPath) ||
-           string.IsNullOrEmpty(parser.JsonFilePath) ||
-           string.IsNullOrEmpty(parser.JsonPathSave))
+           string.IsNullOrEmpty(parser.JsonFilePath))
         {
-            MessageBox.Show("Невыбран исходный файл или путь до папки Debug");
+            MessageBox.Show("Не выбран исходный файл или путь до папки Debug");
             return;
         }
 
-        ParserLogic logic = new();
-        Status result = await logic.ParserFile(parser);
-        string message = result.Message + result.SystemInfo;
-        MessageBox.Show(message);
+        var result = await _detailsCommand.AddNewModule(parser);
+        ResultLabel.Content = result.Message;
     }
 }

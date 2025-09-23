@@ -24,6 +24,11 @@ namespace ConfigManagerStend.Domain.Entities
         public string Path { get; set; }
 
         /// <summary>
+        /// Путь к папке *-delosrv/a/
+        /// </summary>
+        public string SrvAFolderPath { get; set; }
+
+        /// <summary>
         /// Версия стенда
         /// </summary>
         public string Version { get; set; } = string.Empty;
@@ -48,10 +53,11 @@ namespace ConfigManagerStend.Domain.Entities
         /// </summary>
         public List<ExternalModule> Modules { get; set; } = new List<ExternalModule>();
 
-        public Stand(string path)
+        public Stand(string path,string srvAFolderPath)
         {
             Name = path.Split("//", StringSplitOptions.RemoveEmptyEntries).Last();
             Path = path;
+            SrvAFolderPath = srvAFolderPath;
         }
     }
 }
