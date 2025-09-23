@@ -2,10 +2,7 @@
 using ConfigManagerStend.Infrastructure.Services;
 using ConfigManagerStend.Logic;
 using ConfigManagerStend.Models;
-using Microsoft.VisualBasic.Logging;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Reflection;
 using System.Windows;
 
 namespace ConfigManagerStend.Infrastructure.Commands
