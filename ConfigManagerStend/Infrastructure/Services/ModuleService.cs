@@ -1,9 +1,13 @@
 ﻿using ConfigManagerStend.Domain;
 using ConfigManagerStend.Domain.Entities;
+using ConfigManagerStend.Domain.Predefineds;
 using ConfigManagerStend.Infrastructure.Enums;
 using ConfigManagerStend.Models;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Windows;
 
 namespace ConfigManagerStend.Infrastructure.Services
 {
@@ -24,30 +28,43 @@ namespace ConfigManagerStend.Infrastructure.Services
         /// <summary>
         /// Добавление информации в БД
         /// </summary>
-        /// <param name="config">конфиг</param>
-        public static async Task<Status> CreateModule(ExternalModule module)
+        public static async Task<Status> CreateModule(ParserModel parser, int standId)
         {
-            if (module is null) { return Statuses.UnexpectedError("Внешний модуль пуст"); }
+            if (standId == 0) { return Statuses.DbError("Неправильный Id стенда"); }
 
-            try
+            using (var db = new AppDbContext())
             {
-                using (var db = new AppDbContext())
+                bool isExist = await db.ExternalModules.Where(ex => ex.FileName == parser.JsonFileName && ex.StandId == standId).AnyAsync();
+                if (isExist) { return Statuses.DbError("Такая запись уже существует"); }
+
+                PdConfigStatus status = new();
+                ExternalModule module = new()
                 {
-                    var stand = await db.Stands.FirstOrDefaultAsync(s => module.StandId == s.Id);
-                    stand.Modules.Add(module);
-                    db.Update(stand);
+                    StandId = standId,
+                    FileName = parser.JsonFileName,
+                    FullPathFile = parser.JsonPathSave,
+                    StatusId = status.exist.Id,
+                };
+
+                try
+                {
                     await db.ExternalModules.AddAsync(module);
                     await db.SaveChangesAsync();
                 }
+                catch (Exception ex)
+                {
+                    return Statuses.DbError(ex.Message+" Inner: "+ex.InnerException);
+                }
             }
-            catch (Exception ex) { return Statuses.DbError(ex.Message); }
-
             return Statuses.Ok();
         }
 
+        /// <summary>
+        /// Отсоеденить модуль от стенда и удалить его с БД
+        /// </summary>
         public static async Task<Status> DeleteModule(int id)
         {
-            if (id == 0) { return Statuses.UnexpectedError("Неправильный Id"); }
+            if (id == 0) { return Statuses.DbError("Неправильный Id"); }
 
             using (var db = new AppDbContext())
             {
@@ -72,8 +89,54 @@ namespace ConfigManagerStend.Infrastructure.Services
                 }
                 catch(Exception ex) { return Statuses.UnexpectedError(ex.Message); }
             }
-
             return Statuses.Ok();   
+        }
+
+        /// <summary>
+        /// Загрузить модули подключенные к стенду строронним путём
+        /// </summary>
+        public static async Task<Status> LoadConnectedModules(Stand stand)
+        {
+            var standPath = stand.SrvAFolderPath + "Settings\\";
+            if (string.IsNullOrEmpty(standPath))
+            {
+                return Statuses.DbError("Путь к стенду пуст");
+            }
+            if (!Directory.Exists(standPath)) 
+            { 
+                return Statuses.UnexpectedError($"Папка не существует:{standPath}");
+            }
+
+            DirectoryInfo hdDirectoryInWhichToSearch = new DirectoryInfo(standPath);
+
+            FileInfo[] filesInfo = hdDirectoryInWhichToSearch.GetFiles("_*" + ".json");
+            
+            using (var db = new AppDbContext())
+            {
+                var modulesFromDb = await db.ExternalModules.Where(m => m.StandId == stand.Id).Select(m => m.FileName).ToListAsync();
+
+                var modules = filesInfo.Where(f => modulesFromDb.All(m => !string.Equals(f.Name, m)))
+                    .Select(f => new ExternalModule
+                    {
+                        StandId = stand.Id,
+                        FullPathFile = f.FullName.Replace(f.Name,""),
+                        FileName = f.Name,
+                        DateFileReplacement = f.LastWriteTime.ToString("g"),
+                        DateFileVerifiedToExist = DateTime.Now.ToString("g"),
+                        StatusId = new PdConfigStatus().exist.Id,
+                    }).ToList();
+
+                try
+                {
+                    await db.ExternalModules.AddRangeAsync(modules);
+                    await db.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    return Statuses.DbError("Ошибка в добавлении подключенных модулей");
+                }
+            }
+            return Statuses.Ok();
         }
     }
 }

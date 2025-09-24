@@ -11,14 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ConfigManagerStend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250818130850_Stand")]
-    partial class Stand
+    [Migration("20250923064440_InitAlpha")]
+    partial class InitAlpha
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.8");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.9");
 
             modelBuilder.Entity("ConfigManagerStend.Domain.Entities.BuildDefinition", b =>
                 {
@@ -96,47 +96,13 @@ namespace ConfigManagerStend.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ConfigManagerStend.Domain.Entities.Config", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("DateFileReplacement")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("DateFileVerifiedToExist")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("FullPathFile")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("NameFile")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("NameStand")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("StatusId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StatusId");
-
-                    b.ToTable("Configs");
-                });
-
             modelBuilder.Entity("ConfigManagerStend.Domain.Entities.ConfigStatus", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("NameStatus")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -148,12 +114,12 @@ namespace ConfigManagerStend.Migrations
                         new
                         {
                             Id = 1,
-                            NameStatus = "Подключен"
+                            Name = "Подключен"
                         },
                         new
                         {
                             Id = 2,
-                            NameStatus = "Отключен"
+                            Name = "Отключен"
                         });
                 });
 
@@ -208,6 +174,78 @@ namespace ConfigManagerStend.Migrations
                     b.ToTable("ConfigStends");
                 });
 
+            modelBuilder.Entity("ConfigManagerStend.Domain.Entities.ExternalModule", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("DateFileReplacement")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("DateFileVerifiedToExist")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FullPathFile")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("StandId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StandId");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("ExternalModules");
+                });
+
+            modelBuilder.Entity("ConfigManagerStend.Domain.Entities.Stand", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("ChekedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DbProvider")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SrvAFolderPath")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Version")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Stands");
+                });
+
             modelBuilder.Entity("ConfigManagerStend.Domain.Entities.TeamProject", b =>
                 {
                     b.Property<int>("Id")
@@ -251,17 +289,6 @@ namespace ConfigManagerStend.Migrations
                     b.Navigation("TeamProject");
                 });
 
-            modelBuilder.Entity("ConfigManagerStend.Domain.Entities.Config", b =>
-                {
-                    b.HasOne("ConfigManagerStend.Domain.Entities.ConfigStatus", "Status")
-                        .WithMany()
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Status");
-                });
-
             modelBuilder.Entity("ConfigManagerStend.Domain.Entities.ConfigStend", b =>
                 {
                     b.HasOne("ConfigManagerStend.Domain.Entities.BuildDefinition", "BuildDefinition")
@@ -271,6 +298,30 @@ namespace ConfigManagerStend.Migrations
                         .IsRequired();
 
                     b.Navigation("BuildDefinition");
+                });
+
+            modelBuilder.Entity("ConfigManagerStend.Domain.Entities.ExternalModule", b =>
+                {
+                    b.HasOne("ConfigManagerStend.Domain.Entities.Stand", "Stand")
+                        .WithMany("Modules")
+                        .HasForeignKey("StandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ConfigManagerStend.Domain.Entities.ConfigStatus", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Stand");
+
+                    b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("ConfigManagerStend.Domain.Entities.Stand", b =>
+                {
+                    b.Navigation("Modules");
                 });
 #pragma warning restore 612, 618
         }

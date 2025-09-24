@@ -37,16 +37,36 @@ namespace ConfigManagerStend.Domain.Entities
         /// DbProvider стенда
         /// </summary>
         public string DbProvider { get; set; } = string.Empty;
+        
+        /// <summary>
+        /// Владелец БД?
+        /// </summary>
+        public string DbOwner { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Порт приложения
+        /// </summary>
+        public string AppPort { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Название приложения
+        /// </summary>
+        public string AppName { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Ссылка на стенд?
+        /// </summary>
+        public string AppUrl { get; set; } = string.Empty;
 
         /// <summary>
         /// Дата и время обновления стенда
         /// </summary>
-        public DateTime? UpdatedAt { get; set; }
+        public string? UpdatedAt { get; set; }
 
         /// <summary>
         /// Дата и время проверки стенда
         /// </summary>
-        public DateTime? ChekedAt { get; set; }
+        public string? ChekedAt { get; set; }
 
         /// <summary>
         /// Подключенные модули
@@ -55,7 +75,7 @@ namespace ConfigManagerStend.Domain.Entities
 
         public Stand(string path,string srvAFolderPath)
         {
-            Name = path.Split("//", StringSplitOptions.RemoveEmptyEntries).Last();
+            Name = path.Split("\\", StringSplitOptions.RemoveEmptyEntries).Last();
             Path = path;
             SrvAFolderPath = srvAFolderPath;
         }

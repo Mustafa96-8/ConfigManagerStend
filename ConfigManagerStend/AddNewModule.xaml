@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ConfigManagerStend"
         mc:Ignorable="d"
-        Title="Добавить новый модуль" Height="140" Width="440">
+        Title="Добавить новый модуль" Height="170" Width="440" ResizeMode="NoResize">
     <Grid>
         <StackPanel Margin="10,10,10,5" >
             <Label Content="Путь до папки Debug:"/>

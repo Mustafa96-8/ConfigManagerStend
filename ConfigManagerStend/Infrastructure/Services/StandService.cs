@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Windows.Shapes;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace ConfigManagerStend.Infrastructure.Services
@@ -32,7 +33,7 @@ namespace ConfigManagerStend.Infrastructure.Services
             using (var db = new AppDbContext())
             {
                 List<Stand> standList = await db.Stands.Include(s => s.Modules).ThenInclude(m => m.Status).ToListAsync();
-                
+
                 PdConfigStatus status = new();
 
                 foreach (Stand stand in standList)
@@ -52,9 +53,13 @@ namespace ConfigManagerStend.Infrastructure.Services
                         if (jsonObject != null)
                         {
                             stand.Version = (string?)jsonObject["ApplicationInfo"]?["AppVersion"] ?? string.Empty;
-                            stand.UpdatedAt = (DateTime?)jsonObject["ApplicationInfo"]?["Date"];
+                            stand.UpdatedAt = (string?)jsonObject["ApplicationInfo"]?["Date"];
                             stand.DbProvider = (string?)jsonObject["Eos"]?["DbProvider"] ?? string.Empty;
-                            stand.ChekedAt = DateTime.Now;
+                            stand.DbOwner = (string?)jsonObject["Eos"]?["UserManagerOptions"]?["DbOwner"] ??string.Empty;
+                            stand.AppPort = (string?)jsonObject["Eos"]?["AppBindingPort"] ??string.Empty;
+                            stand.AppName = (string?)jsonObject["Eos"]?["AppName"] ??string.Empty;
+                            stand.AppUrl = string.IsNullOrEmpty(stand.AppName)?"":"https://"+stand.AppName+ ".devel.loc/";
+                            stand.ChekedAt = DateTime.Now.ToString("g");
                         }
                     }
                     foreach (var module in stand.Modules)
@@ -67,7 +72,7 @@ namespace ConfigManagerStend.Infrastructure.Services
                         {
                             module.StatusId = status.unexist.Id;
                         }
-                        module.DateFileVerifiedToExist = DateTime.Now;
+                        module.DateFileVerifiedToExist = DateTime.Now.ToString("g");
                     }
                 }
                 try
@@ -95,7 +100,7 @@ namespace ConfigManagerStend.Infrastructure.Services
 
                 DirectoryInfo hdDirectoryInWhichToSearch = new DirectoryInfo($"{path}\\config\\");
                 DirectoryInfo[] ConfigDir = hdDirectoryInWhichToSearch.GetDirectories("*" + "-delosrv");
-                
+
                 var aFolder = ConfigDir[0].FullName + "\\a\\";
 
                 if (!File.Exists(aFolder + "appsettings.json"))
@@ -114,22 +119,51 @@ namespace ConfigManagerStend.Infrastructure.Services
                     if (jsonObject != null)
                     {
                         stand.Version = (string?)jsonObject["ApplicationInfo"]?["AppVersion"] ?? string.Empty;
-                        stand.UpdatedAt = (DateTime?)jsonObject["ApplicationInfo"]?["Date"];
+                        stand.UpdatedAt = (string?)jsonObject["ApplicationInfo"]?["Date"];
                         stand.DbProvider = (string?)jsonObject["Eos"]?["DbProvider"] ?? string.Empty;
-                        stand.ChekedAt = DateTime.Now;
+                        stand.DbOwner = (string?)jsonObject["Eos"]?["UserManagerOptions"]?["DbOwner"] ?? string.Empty;
+                        stand.AppPort = (string?)jsonObject["Eos"]?["AppBindingPort"] ?? string.Empty;
+                        stand.AppName = (string?)jsonObject["Eos"]?["AppName"] ?? string.Empty;
+                        stand.AppUrl = string.IsNullOrEmpty(stand.AppName) ? "" : "https://" + stand.AppName + ".devel.loc/";
+                        stand.ChekedAt = DateTime.Now.ToString("g");
                     }
                 }
-                catch(Exception ex) { return Statuses.UnexpectedError($"Ошибка во время чтения информации стенда:{ex.Message}"); }
+                catch (Exception ex) { return Statuses.UnexpectedError($"Ошибка во время чтения информации стенда:{ex.Message}"); }
                 try
                 {
                     db.Stands.UpdateRange(stand);
                     await db.SaveChangesAsync();
                 }
-                catch(Exception ex){ return Statuses.DbError(ex.Message); }
+                catch (Exception ex) { return Statuses.DbError(ex.Message); }
 
                 return Statuses.Ok();
             }
         }
 
+        /// <summary>
+        /// Перестать отслеживать стенд в программе, удаление стнеда и Модулей из БД
+        /// </summary>
+        public static async Task<Status> UnTrackStand(int id)
+        {
+            if (id == 0) { return Statuses.DbError("Неправильный Id"); }
+
+            using (var db = new AppDbContext())
+            {
+                var standFromDb = await db.Stands.FirstOrDefaultAsync(s => s.Id == id);
+
+                if (standFromDb is null)
+                    return Statuses.DbError($"Не удалось найти запись в БД: {id}");
+                var modulesFromDbByStand = await db.ExternalModules.Where(m => m.StandId == id).ToListAsync();
+                try
+                {
+                    db.ExternalModules.RemoveRange(modulesFromDbByStand);
+                    db.Stands.Remove(standFromDb);
+                    await db.SaveChangesAsync();
+                }
+                catch (Exception ex) { return Statuses.DbError($"Ошибка при удалении стенда или модулей:{ex.Message}"); }
+            }
+            return Statuses.Ok();
+
+        }
     }
 }

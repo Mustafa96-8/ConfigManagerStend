@@ -16,4 +16,8 @@ public class Status
         Message = message;
         SystemInfo = systemInfo;
     }
+    public override string ToString()
+    {
+        return Message + SystemInfo;
+    }
 }

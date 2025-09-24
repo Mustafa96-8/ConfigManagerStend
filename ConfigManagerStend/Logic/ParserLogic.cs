@@ -1,11 +1,12 @@
-﻿using ConfigManagerStend.Models;
-using System.Text.Json.Nodes;
-using System.IO;
-using ConfigManagerStend.Infrastructure.Enums;
-using System.Threading.Tasks;
-using ConfigManagerStend.Domain.Entities;
+﻿using ConfigManagerStend.Domain.Entities;
 using ConfigManagerStend.Domain.Predefineds;
+using ConfigManagerStend.Infrastructure.Enums;
 using ConfigManagerStend.Infrastructure.Services;
+using ConfigManagerStend.Models;
+using System.IO;
+using System.Text.Json.Nodes;
+using System.Threading.Tasks;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
 namespace ConfigManagerStend.Logic
 {
@@ -35,7 +36,7 @@ namespace ConfigManagerStend.Logic
 
                 string modifiedJson = jsonNode!.ToJsonString();
                 parser.JsonFileName = "_" + jsonNode["Name"] + ".json";
-                parser.JsonPathSave = stand.SrvAFolderPath + "\\Settings\\";
+                parser.JsonPathSave = stand.SrvAFolderPath + "Settings\\";
                 // Записываем измененный JSON в новый файл
                 File.WriteAllText(Path.Combine(parser.JsonPathSave, parser.JsonFileName), modifiedJson);
             }
@@ -43,24 +44,7 @@ namespace ConfigManagerStend.Logic
             {
                return Statuses.UnexpectedError(ex.Message);
             }
-
-
-            return await SaveInDb(parser, stand);
-        }
-
-        private async Task <Status> SaveInDb(ParserModel parser, Stand stand)
-        {
-            PdConfigStatus status = new();
-            ExternalModule module = new()
-            {
-                Stand = stand,
-                StandId = stand.Id,
-                FileName = parser.JsonFileName,
-                FullPathFile = parser.JsonPathSave,
-                StatusId = status.exist.Id,
-            };
-
-            return await ModuleService.CreateModule(module);
+            return await ModuleService.CreateModule(parser,stand.Id);
         }
     }
 }

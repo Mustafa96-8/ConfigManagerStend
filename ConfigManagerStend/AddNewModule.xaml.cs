@@ -78,6 +78,6 @@ public partial class AddNewModule : Window
         }
 
         var result = await _detailsCommand.AddNewModule(parser);
-        ResultLabel.Content = result.Message;
+        ResultLabel.Content = result.ToString();
     }
 }

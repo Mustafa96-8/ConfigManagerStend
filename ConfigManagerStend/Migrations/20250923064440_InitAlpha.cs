@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -7,11 +8,43 @@
 namespace ConfigManagerStend.Migrations
 {
     /// <inheritdoc />
-    public partial class Stand : Migration
+    public partial class InitAlpha : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "ConfigStatuses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ConfigStatuses", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Stands",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Path = table.Column<string>(type: "TEXT", nullable: false),
+                    SrvAFolderPath = table.Column<string>(type: "TEXT", nullable: false),
+                    Version = table.Column<string>(type: "TEXT", nullable: false),
+                    DbProvider = table.Column<string>(type: "TEXT", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    ChekedAt = table.Column<DateTime>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Stands", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "TeamProjects",
                 columns: table => new
@@ -23,6 +56,36 @@ namespace ConfigManagerStend.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TeamProjects", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ExternalModules",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    StandId = table.Column<int>(type: "INTEGER", nullable: false),
+                    FullPathFile = table.Column<string>(type: "TEXT", nullable: false),
+                    FileName = table.Column<string>(type: "TEXT", nullable: false),
+                    DateFileReplacement = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    DateFileVerifiedToExist = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    StatusId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExternalModules", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ExternalModules_ConfigStatuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "ConfigStatuses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ExternalModules_Stands_StandId",
+                        column: x => x.StandId,
+                        principalTable: "Stands",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -74,6 +137,15 @@ namespace ConfigManagerStend.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "ConfigStatuses",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Подключен" },
+                    { 2, "Отключен" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "TeamProjects",
                 columns: new[] { "Id", "NameProject" },
                 values: new object[,]
@@ -108,6 +180,16 @@ namespace ConfigManagerStend.Migrations
                 name: "IX_ConfigStends_RepoId",
                 table: "ConfigStends",
                 column: "RepoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExternalModules_StandId",
+                table: "ExternalModules",
+                column: "StandId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExternalModules_StatusId",
+                table: "ExternalModules",
+                column: "StatusId");
         }
 
         /// <inheritdoc />
@@ -117,7 +199,16 @@ namespace ConfigManagerStend.Migrations
                 name: "ConfigStends");
 
             migrationBuilder.DropTable(
+                name: "ExternalModules");
+
+            migrationBuilder.DropTable(
                 name: "BuildDefinitions");
+
+            migrationBuilder.DropTable(
+                name: "ConfigStatuses");
+
+            migrationBuilder.DropTable(
+                name: "Stands");
 
             migrationBuilder.DropTable(
                 name: "TeamProjects");

@@ -26,8 +26,6 @@ namespace ConfigManagerStend
     {
         private DetailsInfoCommand _detailsCommand;
 
-        private ParserModel parser = new();
-
         public static ListView AllModules = new ();
 
         public static ListView AllStands = new();
@@ -42,13 +40,21 @@ namespace ConfigManagerStend
             AllStands = StandListView;
         }
 
-
-
-
         private void openStandWin_Click(object sender, RoutedEventArgs e)
         {
             StendWindow sw = new();
             sw.ShowDialog();
         }
+
+        private void RefreshStandList_Click(object sender, RoutedEventArgs e)
+        {
+            _detailsCommand.UpdateGlobalDisplay();
+        }
+
+        private void RefreshListViewBtn_Click(object sender, RoutedEventArgs e)
+        {
+            _detailsCommand.UpdateModuleDisplay();
+        }
+
     }
 }

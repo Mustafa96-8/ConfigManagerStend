@@ -71,6 +71,6 @@ public partial class AddNewStand : Window
     private async void addStandBtn_Click(object sender, RoutedEventArgs e)
     {
         var result = await _detailsCommand.AddNewStand(BrowseStandTextBox.Text);
-        ResultLabel.Content = result.Message;
+        ResultLabel.Content = result.ToString();
     }
 }

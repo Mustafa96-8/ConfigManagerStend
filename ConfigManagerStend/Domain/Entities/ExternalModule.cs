@@ -16,9 +16,9 @@ internal class ExternalModule
     [ForeignKey(nameof(Stand))]
     public required int StandId { get; set; }
 
-    public required Stand Stand { get; set; }
+    public Stand Stand { get; set; }
     /// <summary>
-    /// Полный путь файла
+    /// Полный путь до файла
     /// </summary>
     public required string FullPathFile { get; set; }
 
@@ -30,12 +30,12 @@ internal class ExternalModule
     /// <summary>
     /// Дата подмены
     /// </summary>
-    public DateTime DateFileReplacement { get; set; } = DateTime.Now;
+    public string DateFileReplacement { get; set; } = DateTime.Now.ToString("g");
 
     /// <summary>
     /// Послендяя проверка существования файла
     /// </summary>
-    public DateTime? DateFileVerifiedToExist { get; set; } = null;
+    public string DateFileVerifiedToExist { get; set; } = string.Empty;
 
     /// <summary>
     /// Статус ID
