@@ -38,8 +38,8 @@ namespace ConfigManagerStend.Infrastructure.Commands
             get { return isStandSelected; } 
         }
 
-        private Stand selectedStand;
-        public Stand SelectedStand
+        private Stand? selectedStand;
+        public Stand? SelectedStand
         {
             set
             {
@@ -58,8 +58,8 @@ namespace ConfigManagerStend.Infrastructure.Commands
             set { allModules = value; NotifyPropertyChanged(nameof(AllModules)); }
         }
 
-        private ExternalModule selectedModule;
-        public ExternalModule SelectedModule
+        private ExternalModule? selectedModule;
+        public ExternalModule? SelectedModule
         {
             set { selectedModule = value; NotifyPropertyChanged(nameof(SelectedModule)); }
             get { return selectedModule; }
@@ -135,8 +135,7 @@ namespace ConfigManagerStend.Infrastructure.Commands
         {
             if (!IsStandSelected) return Statuses.UnexpectedError("Стенд не выбран");
             ParserLogic logic = new();
-            Status result = await logic.ParserFile(parser, selectedStand);
-            await LoadModulesAsync();
+            Status result = await logic.ParserFile(parser, selectedStand!);
             return result;
         }
 
@@ -148,7 +147,7 @@ namespace ConfigManagerStend.Infrastructure.Commands
         public async Task LoadModulesAsync()
         {
             if (IsStandSelected)
-                AllModules = await ModuleService.GetAllModules(selectedStand.Id);
+                AllModules = await ModuleService.GetAllModules(selectedStand!.Id);
         }
         private void ShowMessageToUser(string message)
         {
@@ -200,8 +199,7 @@ namespace ConfigManagerStend.Infrastructure.Commands
                     {
                         Status result = ModuleService.DeleteModule(SelectedModule.Id).Result;
                         ShowMessageToUser(result.ToString());
-                        UpdateModuleDisplay();
-                        GlobalNullValueProp();
+                        UpdateModuleDisplay(true);
                     }
                 });
             }
@@ -216,7 +214,7 @@ namespace ConfigManagerStend.Infrastructure.Commands
                 {
                     if (IsStandSelected)
                     {
-                        Status result = StandService.UnTrackStand(SelectedStand.Id).Result;
+                        Status result = StandService.UnTrackStand(SelectedStand!.Id).Result;
                         ShowMessageToUser(result.ToString());
                         UpdateGlobalDisplay(true);
                         GlobalNullValueProp();
@@ -261,7 +259,7 @@ namespace ConfigManagerStend.Infrastructure.Commands
                 {
                     if (IsStandSelected)
                     {
-                        Process.Start("explorer.exe", $"{SelectedStand.Path}");
+                        Process.Start("explorer.exe", $"{SelectedStand!.Path}");
                         UpdateGlobalDisplay();
                         GlobalNullValueProp();
                     }
@@ -277,6 +275,7 @@ namespace ConfigManagerStend.Infrastructure.Commands
             if (UpdateFromDb)
                 LoadModulesAsync().Wait();
             MainWindow.AllModules.ItemsSource = null;
+            SelectedModule = null;
             MainWindow.AllModules.Items.Clear();
             MainWindow.AllModules.ItemsSource = AllModules;
             MainWindow.AllModules.Items.Refresh();

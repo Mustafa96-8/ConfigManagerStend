@@ -79,5 +79,6 @@ public partial class AddNewModule : Window
 
         var result = await _detailsCommand.AddNewModule(parser);
         ResultLabel.Content = result.ToString();
+        _detailsCommand.UpdateModuleDisplay(true);
     }
 }

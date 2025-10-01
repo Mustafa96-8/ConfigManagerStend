@@ -24,16 +24,17 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0" Margin="5,0,5,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="22"/>
                     </Grid.ColumnDefinitions>
                     <Label Grid.Column="0" FontSize="16" FontWeight="SemiBold" Content="Стенды:"/>
-                    <Button Grid.Column="1" VerticalAlignment="Bottom" x:Name="RefreshStandList" Click="RefreshStandList_Click" Width="20" Height="20">
-                        <Image Source="shared\icon-refresh.png" Width="16" Height="16"/>
+                    <Button Grid.Column="1" VerticalAlignment="Bottom" x:Name="RefreshStandList" Click="RefreshStandList_Click" Width="22" Height="22">
+                        <Image Source="shared\icon-refresh.png" Width="18" Height="18"/>
                     </Button>
                 </Grid>
                 <ListView Grid.Row="1" x:Name="StandListView" ItemsSource="{Binding Stands}" SelectedItem="{Binding SelectedStand}" Margin="5,1,5,1"  MinHeight="200">
@@ -52,9 +53,11 @@
                         </GridView>
                     </ListView.View>
                 </ListView>
-                <StackPanel Grid.Row="2">
-                    <Button x:Name="AddNewStandBtn" Content="Добавить новый" Command="{Binding OpenAddNewStandWindow}" Margin="5" Padding="2" />
-                    <Button x:Name="RefreshStands" Content="Обновить стенды" Margin="5" Padding="2" Command="{Binding RefreshStandInfo}"/>
+                <StackPanel Grid.Row="2" VerticalAlignment="Center">
+                    <Button x:Name="AddNewStandBtn" Height="30" Content="Добавить новый"  Command="{Binding OpenAddNewStandWindow}" Margin="5"/>
+                </StackPanel>
+                <StackPanel Grid.Row="3" VerticalAlignment="Center">
+                    <Button x:Name="RefreshStands" Height="30" Content="Обновить стенды" Margin="5" Command="{Binding RefreshStandInfo}"/>
                 </StackPanel>
             </Grid>
             <Grid Grid.Column="1">
@@ -87,11 +90,11 @@
                     <Grid Margin="0,0,2,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="22"/>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" FontSize="11" FontWeight="SemiBold" Content="Подключенные модули:"/>
-                        <Button Grid.Column="1" VerticalAlignment="Bottom" IsEnabled="{Binding IsStandSelected}" x:Name="RefreshListViewBtn" Width="20" Height="20">
-                            <Image Source="shared\icon-refresh.png" Width="16" Height="16"/>
+                        <Button Grid.Column="1" VerticalAlignment="Bottom" IsEnabled="{Binding IsStandSelected}" x:Name="RefreshListViewBtn" Width="22" Height="22">
+                            <Image Source="shared\icon-refresh.png" Width="18" Height="18"/>
                         </Button>
                     </Grid>
                 </StackPanel>
