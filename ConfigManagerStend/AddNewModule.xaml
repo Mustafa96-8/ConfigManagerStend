@@ -1,0 +1,21 @@
+﻿<Window x:Class="ConfigManagerStend.AddNewModule"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ConfigManagerStend"
+        mc:Ignorable="d"
+        Title="Добавить новый модуль" Height="170" Width="440" ResizeMode="NoResize">
+    <Grid>
+        <StackPanel Margin="10,10,10,5" >
+            <Label Content="Путь до папки Debug:"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBox x:Name="directoryPathTextBox" Width="350" IsReadOnly="True"/>
+                <Button Content="Обзор..." Margin="5,0,0,0" Padding="2" Click="BrowseDirectory_Click"/>
+            </StackPanel>
+            <Button x:Name="substitutionBtn" Width="200" Height="30" Content="Добавить" 
+                            Click="SubstitutionBtn_Click"  Margin="5"/>
+            <Label x:Name="ResultLabel"/>
+        </StackPanel>
+    </Grid>
+</Window>

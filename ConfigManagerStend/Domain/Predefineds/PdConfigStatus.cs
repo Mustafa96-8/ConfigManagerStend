@@ -3,7 +3,7 @@
 namespace ConfigManagerStend.Domain.Predefineds
 {
     /// <summary>
-    /// Предопределенные данные
+    /// Предопределенные данные. Статус подмены
     /// </summary>
     internal class PdConfigStatus
     {
@@ -13,7 +13,7 @@ namespace ConfigManagerStend.Domain.Predefineds
         internal ConfigStatus exist = new()
         {
             Id = 1,
-            NameStatus = "Подключен"
+            Name = "Подключен"
         };
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace ConfigManagerStend.Domain.Predefineds
         internal ConfigStatus unexist = new()
         {
             Id = 2,
-            NameStatus = "Отключен"
+            Name = "Отключен"
         };
 
         internal List<ConfigStatus> ConfigStatuses { get;  set; } 

@@ -21,20 +21,20 @@ namespace ConfigManagerStend
     /// </summary>
     public partial class DetailInfo : Window
     {
-        public static ListView AllDitails;
+        public static ListView AllModules;
         private DetailsInfoCommand _detailsCommand;
-        public DetailInfo()
+        internal DetailInfo(DetailsInfoCommand detailsInfoCommand)
         {
             InitializeComponent();
-            _detailsCommand = new DetailsInfoCommand();
+            _detailsCommand = detailsInfoCommand;
             DataContext = _detailsCommand;
-            _detailsCommand.LoadConfigsAsync().Wait();
-            AllDitails = ViewDetails;
+            _detailsCommand.LoadModulesAsync().Wait();
+            AllModules = ViewDetails;
         }
 
         private void updateInfo_Click(object sender, RoutedEventArgs e)
         {
-            _detailsCommand.UpdateDisplay();
+            _detailsCommand.UpdateDetailsDisplay();
         }
     }
 }

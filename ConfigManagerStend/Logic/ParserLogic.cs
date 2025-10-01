@@ -1,17 +1,18 @@
-﻿using ConfigManagerStend.Models;
-using System.Text.Json.Nodes;
-using System.IO;
-using ConfigManagerStend.Infrastructure.Enums;
-using System.Threading.Tasks;
-using ConfigManagerStend.Domain.Entities;
+﻿using ConfigManagerStend.Domain.Entities;
 using ConfigManagerStend.Domain.Predefineds;
+using ConfigManagerStend.Infrastructure.Enums;
 using ConfigManagerStend.Infrastructure.Services;
+using ConfigManagerStend.Models;
+using System.IO;
+using System.Text.Json.Nodes;
+using System.Threading.Tasks;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
 namespace ConfigManagerStend.Logic
 {
     internal class ParserLogic
     {
-        public async Task<Status> ParserFile(ParserModel parser)
+        public async Task<Status> ParserFile(ParserModel parser,Stand stand)
         {
             try
             {
@@ -35,7 +36,7 @@ namespace ConfigManagerStend.Logic
 
                 string modifiedJson = jsonNode!.ToJsonString();
                 parser.JsonFileName = "_" + jsonNode["Name"] + ".json";
-
+                parser.JsonPathSave = stand.SrvAFolderPath + "Settings\\";
                 // Записываем измененный JSON в новый файл
                 File.WriteAllText(Path.Combine(parser.JsonPathSave, parser.JsonFileName), modifiedJson);
             }
@@ -43,23 +44,7 @@ namespace ConfigManagerStend.Logic
             {
                return Statuses.UnexpectedError(ex.Message);
             }
-
-
-            return await SaveInDb(parser);
-        }
-
-        private async Task <Status> SaveInDb(ParserModel parser)
-        {
-                PdConfigStatus status = new();
-                Config config = new()
-                {
-                    NameStand = parser.NameStend,
-                    NameFile = parser.JsonFileName,
-                    FullPathFile = parser.JsonPathSave,
-                    StatusId = status.exist.Id,
-                };
-
-               return await DetailService.CreateData(config);
+            return await ModuleService.CreateModule(parser,stand.Id);
         }
     }
 }

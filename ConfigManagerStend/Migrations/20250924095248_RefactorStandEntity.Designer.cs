@@ -2,6 +2,7 @@
 using ConfigManagerStend.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ConfigManagerStend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250924095248_RefactorStandEntity")]
+    partial class RefactorStandEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.9");
@@ -33,7 +36,7 @@ namespace ConfigManagerStend.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("BuildDefinitions", (string)null);
+                    b.ToTable("BuildDefinitions");
 
                     b.HasData(
                         new
@@ -104,7 +107,7 @@ namespace ConfigManagerStend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ConfigStatuses", (string)null);
+                    b.ToTable("ConfigStatuses");
 
                     b.HasData(
                         new
@@ -167,7 +170,7 @@ namespace ConfigManagerStend.Migrations
 
                     b.HasIndex("RepoId");
 
-                    b.ToTable("ConfigStends", (string)null);
+                    b.ToTable("ConfigStends");
                 });
 
             modelBuilder.Entity("ConfigManagerStend.Domain.Entities.ExternalModule", b =>
@@ -204,7 +207,7 @@ namespace ConfigManagerStend.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("ExternalModules", (string)null);
+                    b.ToTable("ExternalModules");
                 });
 
             modelBuilder.Entity("ConfigManagerStend.Domain.Entities.Stand", b =>
@@ -257,7 +260,7 @@ namespace ConfigManagerStend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Stands", (string)null);
+                    b.ToTable("Stands");
                 });
 
             modelBuilder.Entity("ConfigManagerStend.Domain.Entities.TeamProject", b =>
@@ -272,7 +275,7 @@ namespace ConfigManagerStend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TeamProjects", (string)null);
+                    b.ToTable("TeamProjects");
 
                     b.HasData(
                         new

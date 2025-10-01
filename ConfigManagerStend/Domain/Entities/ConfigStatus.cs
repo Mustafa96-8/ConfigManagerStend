@@ -10,6 +10,6 @@
         /// <summary>
         /// Наименование статуса
         /// </summary>
-        public required string NameStatus { get; set; }
+        public required string Name { get; set; }
     }
 }

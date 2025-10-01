@@ -6,25 +6,134 @@
         xmlns:local="clr-namespace:ConfigManagerStend"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="Конфигуратор JSON файлов" Height="250" Width="450">
+        Title="Конфигуратор JSON файлов" MinHeight="420" Height="420" MinWidth="600" Width="1100">
     <Grid>
-        <StackPanel Margin="10,10,10,4">
-            <!-- Поле для выбора каталога -->
-            <Label Content="Путь до папки Debug:" Margin="0,10,0,0"/>
-            <StackPanel Orientation="Horizontal">
-                <TextBox x:Name="directoryPathTextBox" Width="350" IsReadOnly="True"/>
-                <Button Content="Обзор..." Margin="5,0,0,0" Padding="2" Click="BrowseDirectory_Click"/>
-            </StackPanel>
-            <!-- Поле для выбора Стенда -->
-            <Label Content="Путь до папки Стенда:" Margin="0,10,0,0"/>
-            <StackPanel Orientation="Horizontal">
-                <TextBox x:Name="BrowseStandTextBox" Width="350" IsReadOnly="True"/>
-                <Button Content="Обзор..." Margin="5,0,0,0" Padding="2" Click="BrowseStand_Click"/>
-            </StackPanel>
-            <Button x:Name="substitutionBtn" Width="200" Height="30" Content="Подменить файл"
-   Click="SubstitutionBtn_Click"  Margin="0,10,5,0" Padding="10,5"/>
-            <Button x:Name="showDetails" Width="200" Height="30" Content="Показать подробности"
-Command="{Binding OpenShowDetails}" HorizontalAlignment="Center" Margin="0,10,5,0" Padding="10,5" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0">
+            <Button x:Name="openStandWin" Content="Разворачивание Стендов (beta)" Click="openStandWin_Click" />
         </StackPanel>
+        <Grid Grid.Row="1" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" Margin="5,0,5,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="22"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" FontSize="16" FontWeight="SemiBold" Content="Стенды:"/>
+                    <Button Grid.Column="1" VerticalAlignment="Bottom" x:Name="RefreshStandList" Click="RefreshStandList_Click" Width="22" Height="22">
+                        <Image Source="shared\icon-refresh.png" Width="18" Height="18"/>
+                    </Button>
+                </Grid>
+                <ListView Grid.Row="1" x:Name="StandListView" ItemsSource="{Binding Stands}" SelectedItem="{Binding SelectedStand}" Margin="5,1,5,1"  MinHeight="200">
+                    <ListView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Показать в проводнике" Command="{Binding OpenStandInFloder}"/>
+                            <MenuItem Header="Убрать отслеживание" Command="{Binding UnTrackStandCommand}"/>
+                        </ContextMenu>
+                    </ListView.ContextMenu>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Порт" DisplayMemberBinding="{Binding Path=AppPort}"/>
+                            <GridViewColumn Header="Стенд" DisplayMemberBinding="{Binding Path=Name}" Width="Auto"/>
+                            <GridViewColumn Header="Дата обновления" DisplayMemberBinding="{Binding Path=UpdatedAt}"/>
+                            <GridViewColumn Header="Дата проверки" DisplayMemberBinding="{Binding Path=ChekedAt}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <StackPanel Grid.Row="2" VerticalAlignment="Center">
+                    <Button x:Name="AddNewStandBtn" Height="30" Content="Добавить новый"  Command="{Binding OpenAddNewStandWindow}" Margin="5"/>
+                </StackPanel>
+                <StackPanel Grid.Row="3" VerticalAlignment="Center">
+                    <Button x:Name="RefreshStands" Height="30" Content="Обновить стенды" Margin="5" Command="{Binding RefreshStandInfo}"/>
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0">
+                    <StackPanel Orientation="Horizontal">
+                        <Label FontSize="16" FontWeight="SemiBold" Content="Информация о стенде:"/>
+                        <Label x:Name="standName" Content="{Binding SelectedStand.Name}" FontSize="16" FontWeight="SemiBold" Margin="2"/>
+                        <TextBox Text="{Binding SelectedStand.AppUrl}" VerticalAlignment="Center" IsReadOnly="True" 
+                                IsReadOnlyCaretVisible="True"  Background="Transparent" BorderThickness="0" FontSize="13" Padding="10" Margin="5,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Версия стенда:" Margin="1"/>
+                        <Label x:Name="standVersion" Content="{Binding SelectedStand.Version}" Margin="1"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Поставщик БД:" Margin="1"/>
+                        <Label x:Name ="standDbProvider" Content="{Binding SelectedStand.DbProvider}" Margin="1"/>
+                        <Label Content=" Владелец БД:" Margin="1"/>
+                        <Label Content="{Binding SelectedStand.DbOwner}" Margin="1"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Название приложения:" Margin="1"/>
+                        <Label Content="{Binding SelectedStand.AppName}" Margin="1"/>
+                    </StackPanel>
+                    <Grid Margin="0,0,2,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="22"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" FontSize="11" FontWeight="SemiBold" Content="Подключенные модули:"/>
+                        <Button Grid.Column="1" VerticalAlignment="Bottom" IsEnabled="{Binding IsStandSelected}" x:Name="RefreshListViewBtn" Width="22" Height="22">
+                            <Image Source="shared\icon-refresh.png" Width="18" Height="18"/>
+                        </Button>
+                    </Grid>
+                </StackPanel>
+                    <ListView Grid.Row="1" IsEnabled="{Binding IsStandSelected}" x:Name="ModuleListView"  ItemsSource="{Binding AllModules}" SelectedItem="{Binding SelectedModule}" Margin="2">
+                        <ListView.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Показать в проводнике" Command="{Binding OpenModuleInFloder}"/>
+                                <MenuItem Header="Удалить" Command="{Binding DeleteModuleCommand}"/>
+                            </ContextMenu>
+                        </ListView.ContextMenu>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Название" DisplayMemberBinding="{Binding Path=FileName}"/>
+                                <GridViewColumn Header="Дата подмены" DisplayMemberBinding="{Binding Path=DateFileReplacement}"/>
+                                <GridViewColumn Header="Статус" DisplayMemberBinding="{Binding Path=Status.Name}"/>
+                                <GridViewColumn Header="Последняя проверка" DisplayMemberBinding="{Binding Path=DateFileVerifiedToExist}"/>
+                            </GridView>
+                        </ListView.View>  
+                    </ListView>
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" IsEnabled="False" x:Name="UpdateModulesInfo"  Content="Обновить информацию" 
+                        Command="{Binding UpdateModulesInfo}" HorizontalAlignment="Stretch" Margin="5" Padding="5,2"  />
+                    <Button Grid.Column="1" IsEnabled="{Binding IsStandSelected}" x:Name="showDetails"  Content="Подробнее" 
+                    Command="{Binding OpenShowDetails}" HorizontalAlignment="Stretch" Margin="5" Padding="5,2" />
+                    <Button Grid.Column="2" IsEnabled="{Binding IsStandSelected}" x:Name="AddNewModule"   Content="Установить модуль" 
+                        Command="{Binding OpenAddNewModuleWindow}" HorizontalAlignment="Stretch" Margin="5" Padding="5,2"/>
+                    <Button Grid.Column="3" IsEnabled="{Binding IsStandSelected}" x:Name="LoadConnectedModules" Content="Загрузить установленные модули" 
+                        Command="{Binding LoadConnectedModules}" HorizontalAlignment="Stretch" Margin="5" Padding="5,2" />
+                </Grid>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>

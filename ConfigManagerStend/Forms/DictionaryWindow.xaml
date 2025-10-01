@@ -1,0 +1,61 @@
+﻿<Window x:Class="ConfigManagerStend.Forms.DictionaryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ConfigManagerStend.Forms"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Name="DictionaryWnd"
+        Title="Словарь. " Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="40" />
+        </Grid.RowDefinitions>
+
+        <StackPanel x:Name="ProjectStackPanel" Grid.Row="0" Visibility="Hidden">
+            <ListView x:Name="ViewProjects" ItemsSource="{Binding AllProjects}" SelectedItem="{Binding SelectedProject}" Width="auto"  FontSize="16">
+                <!-- Контекстное меню -->
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Изменить" Command="{Binding EditProject}"/>
+                        <MenuItem Header="Удалить" Command="{Binding DeleteProject}"/>
+                    </ContextMenu>
+                </ListView.ContextMenu>
+
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Path=Id}"/>
+                        <GridViewColumn Header="Наименование проекта" DisplayMemberBinding="{Binding Path=NameProject}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </StackPanel>
+
+        <StackPanel x:Name="ReposStackPanel" Grid.Row="0" Visibility="Hidden">
+            <ListView x:Name="ViewRepos" ItemsSource="{Binding AllRepos}" SelectedItem="{Binding SelectedRepo}" Width="auto"  FontSize="16">
+                <!-- Контекстное меню -->
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Изменить" Command="{Binding EditRepo}"/>
+                        <MenuItem Header="Удалить" Command="{Binding DeleteRepo}"/>
+                    </ContextMenu>
+                </ListView.ContextMenu>
+
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Path=Id}"/>
+                        <GridViewColumn Header="Наименование проекта" DisplayMemberBinding="{Binding Path=TeamProject.NameProject}"/>
+                        <GridViewColumn Header="Наименование репозитория" DisplayMemberBinding="{Binding Path=NameRepo}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1">
+            <Button x:Name="addWind" Content="Добавить новый.." Padding="2" Width="auto" Height="auto" Command="{Binding OpenAddWindow}" CommandParameter="{Binding ElementName=DictionaryWnd}"/>
+        </StackPanel>
+        
+    </Grid>
+</Window>
