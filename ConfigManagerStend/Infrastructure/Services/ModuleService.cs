@@ -21,6 +21,28 @@ namespace ConfigManagerStend.Infrastructure.Services
             using (var db = new AppDbContext())
             {
                 List<ExternalModule> modules = await db.ExternalModules.Include(x => x.Status).Where(x => x.StandId == standId).ToListAsync();
+                PdConfigStatus status = new();
+
+                foreach (ExternalModule module in modules)
+                {
+                    if (File.Exists(module.FullPathFile + module.FileName))
+                    {
+                        module.StatusId = status.exist.Id;
+                    }
+                    else
+                    {
+                        module.StatusId = status.unexist.Id;
+                    }
+                    module.DateFileVerifiedToExist = DateTime.Now.ToString();
+                }
+
+                try
+                {
+                    db.ExternalModules.UpdateRange(modules);
+                    await db.SaveChangesAsync();
+                }
+                catch { return new(); }
+
                 return modules;
             }
         }

@@ -93,8 +93,8 @@
                             <ColumnDefinition Width="22"/>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" FontSize="11" FontWeight="SemiBold" Content="Подключенные модули:"/>
-                        <Button Grid.Column="1" VerticalAlignment="Bottom" IsEnabled="{Binding IsStandSelected}" x:Name="RefreshListViewBtn" Width="22" Height="22">
-                            <Image Source="shared\icon-refresh.png" Width="18" Height="18"/>
+                        <Button Grid.Column="1" VerticalAlignment="Bottom" IsEnabled="{Binding IsStandSelected}" x:Name="RefreshListViewBtn" Width="22" Height="22" Click="RefreshListViewBtn_Click">
+                            <Image Source="shared\icon-refresh.png" Width="18" Height="18" />
                         </Button>
                     </Grid>
                 </StackPanel>
@@ -126,11 +126,9 @@
                     </Grid.ColumnDefinitions>
                     <Button Grid.Column="0" IsEnabled="False" x:Name="UpdateModulesInfo"  Content="Обновить информацию" 
                         Command="{Binding UpdateModulesInfo}" HorizontalAlignment="Stretch" Margin="5" Padding="5,2"  />
-                    <Button Grid.Column="1" IsEnabled="{Binding IsStandSelected}" x:Name="showDetails"  Content="Подробнее" 
-                    Command="{Binding OpenShowDetails}" HorizontalAlignment="Stretch" Margin="5" Padding="5,2" />
-                    <Button Grid.Column="2" IsEnabled="{Binding IsStandSelected}" x:Name="AddNewModule"   Content="Установить модуль" 
+                    <Button Grid.Column="1" IsEnabled="{Binding IsStandSelected}" x:Name="AddNewModule"   Content="Установить модуль" 
                         Command="{Binding OpenAddNewModuleWindow}" HorizontalAlignment="Stretch" Margin="5" Padding="5,2"/>
-                    <Button Grid.Column="3" IsEnabled="{Binding IsStandSelected}" x:Name="LoadConnectedModules" Content="Загрузить установленные модули" 
+                    <Button Grid.Column="2" IsEnabled="{Binding IsStandSelected}" x:Name="LoadConnectedModules" Content="Загрузить установ. модули" 
                         Command="{Binding LoadConnectedModules}" HorizontalAlignment="Stretch" Margin="5" Padding="5,2" />
                 </Grid>
             </Grid>

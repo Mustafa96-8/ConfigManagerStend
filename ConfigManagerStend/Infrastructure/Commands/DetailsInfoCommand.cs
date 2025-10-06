@@ -3,7 +3,6 @@ using ConfigManagerStend.Infrastructure.Enums;
 using ConfigManagerStend.Infrastructure.Services;
 using ConfigManagerStend.Logic;
 using ConfigManagerStend.Models;
-using MS.WindowsAPICodePack.Internal;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
@@ -69,22 +68,6 @@ namespace ConfigManagerStend.Infrastructure.Commands
 
 
         #region WINDOWS
-
-        //Открыть окно "Подробно"
-        private RelayCommand _openShowDetails;
-        public RelayCommand OpenShowDetails
-        {
-            get
-            {
-                return _openShowDetails ?? new(obj =>
-                {
-                    DetailInfo window = new(this);
-                    window.Owner = Application.Current.MainWindow;
-                    window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-                    window.ShowDialog();
-                });
-            }
-        }
 
         private RelayCommand _openAddNewStandWindow;
         public RelayCommand OpenAddNewStandWindow
@@ -270,7 +253,7 @@ namespace ConfigManagerStend.Infrastructure.Commands
 
 
         #region UPDATE FUNCTIONS
-        internal void UpdateModuleDisplay(bool UpdateFromDb=false)
+        internal void UpdateModuleDisplay(bool UpdateFromDb = false)
         {
             if (UpdateFromDb)
                 LoadModulesAsync().Wait();
@@ -280,14 +263,7 @@ namespace ConfigManagerStend.Infrastructure.Commands
             MainWindow.AllModules.ItemsSource = AllModules;
             MainWindow.AllModules.Items.Refresh();
         }
-        internal void UpdateDetailsDisplay()
-        {
-            LoadModulesAsync().Wait();
-            DetailInfo.AllModules.ItemsSource = null;
-            DetailInfo.AllModules.Items.Clear();
-            DetailInfo.AllModules.ItemsSource = AllModules;
-            DetailInfo.AllModules.Items.Refresh();
-        }
+
         internal void UpdateGlobalDisplay(bool UpdateFromDb=false)
         {
             if (UpdateFromDb)
