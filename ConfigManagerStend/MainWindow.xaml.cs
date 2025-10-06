@@ -53,8 +53,9 @@ namespace ConfigManagerStend
 
         private void RefreshListViewBtn_Click(object sender, RoutedEventArgs e)
         {
-            _detailsCommand.UpdateModuleDisplay();
+            _detailsCommand.UpdateModuleDisplay(true);
         }
 
+  
     }
 }
