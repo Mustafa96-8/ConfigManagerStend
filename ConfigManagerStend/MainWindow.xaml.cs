@@ -56,6 +56,21 @@ namespace ConfigManagerStend
             _detailsCommand.UpdateModuleDisplay(true);
         }
 
-  
+        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = e.Uri.AbsoluteUri,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Не удалось открыть ссылку: {ex.Message}");
+            }
+            e.Handled = true;
+        }
     }
 }

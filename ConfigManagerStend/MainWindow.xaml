@@ -70,8 +70,12 @@
                     <StackPanel Orientation="Horizontal">
                         <Label FontSize="16" FontWeight="SemiBold" Content="Информация о стенде:"/>
                         <Label x:Name="standName" Content="{Binding SelectedStand.Name}" FontSize="16" FontWeight="SemiBold" Margin="2"/>
-                        <TextBox Text="{Binding SelectedStand.AppUrl}" VerticalAlignment="Center" IsReadOnly="True" 
-                                IsReadOnlyCaretVisible="True"  Background="Transparent" BorderThickness="0" FontSize="13" Padding="10" Margin="5,0,0,0"/>
+                        <TextBlock Margin="10">
+                            <Hyperlink NavigateUri="{Binding SelectedStand.AppUrl}" RequestNavigate="Hyperlink_RequestNavigate">
+                                🌐 <Run Text="{Binding SelectedStand.AppUrl}"/>
+                            </Hyperlink>
+                        </TextBlock>
+
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Label Content="Версия стенда:" Margin="1"/>
