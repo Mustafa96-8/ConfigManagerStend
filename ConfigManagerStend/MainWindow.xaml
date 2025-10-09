@@ -125,14 +125,10 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" IsEnabled="False" x:Name="UpdateModulesInfo"  Content="Обновить информацию" 
-                        Command="{Binding UpdateModulesInfo}" HorizontalAlignment="Stretch" Margin="5" Padding="5,2"  />
-                    <Button Grid.Column="1" IsEnabled="{Binding IsStandSelected}" x:Name="AddNewModule"   Content="Установить модуль" 
+                    <Button Grid.Column="0" IsEnabled="{Binding IsStandSelected}" x:Name="AddNewModule"   Content="Установить модуль" 
                         Command="{Binding OpenAddNewModuleWindow}" HorizontalAlignment="Stretch" Margin="5" Padding="5,2"/>
-                    <Button Grid.Column="2" IsEnabled="{Binding IsStandSelected}" x:Name="LoadConnectedModules" Content="Загрузить установ. модули" 
+                    <Button Grid.Column="1" IsEnabled="{Binding IsStandSelected}" x:Name="LoadConnectedModules" Content="Загрузить установ. модули" 
                         Command="{Binding LoadConnectedModules}" HorizontalAlignment="Stretch" Margin="5" Padding="5,2" />
                 </Grid>
             </Grid>

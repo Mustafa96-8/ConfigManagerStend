@@ -25,15 +25,17 @@ namespace ConfigManagerStend.Infrastructure.Services
 
                 foreach (ExternalModule module in modules)
                 {
-                    if (File.Exists(module.FullPathFile + module.FileName))
+                    module.DateFileVerifiedToExist = DateTime.Now.ToString("g");
+                    if (!File.Exists(module.FullPathFile + module.FileName))
                     {
-                        module.StatusId = status.exist.Id;
+                        module.StatusId = new PdConfigStatus().unexist.Id;
                     }
                     else
                     {
-                        module.StatusId = status.unexist.Id;
+                        var mdFile = new FileInfo(module.FullPathFile + module.FileName);
+                        module.DateFileReplacement = mdFile.LastWriteTime.ToString("g");
+                        module.StatusId = new PdConfigStatus().exist.Id;
                     }
-                    module.DateFileVerifiedToExist = DateTime.Now.ToString();
                 }
 
                 try
