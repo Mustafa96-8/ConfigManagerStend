@@ -99,7 +99,14 @@ namespace ConfigManagerStend.Infrastructure.Services
                     return Statuses.DbError($"Стенд уже добавлен в систему: {standFromDb.Name}");
 
                 DirectoryInfo hdDirectoryInWhichToSearch = new DirectoryInfo($"{path}\\config\\");
+
                 DirectoryInfo[] ConfigDir = hdDirectoryInWhichToSearch.GetDirectories("*" + "-delosrv");
+
+                if (ConfigDir == null || ConfigDir.Length == 0)
+                {
+                    //МБ ЭТО ТИТУЛ ?
+                    ConfigDir = hdDirectoryInWhichToSearch.GetDirectories("*" + "-titulsrv");
+                }
 
                 var aFolder = ConfigDir[0].FullName + "\\a\\";
 

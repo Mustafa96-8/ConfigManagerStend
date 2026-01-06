@@ -48,6 +48,12 @@ public partial class AddNewStand : Window
             {
                 DirectoryInfo[] ConfigDir = hdDirectoryInWhichToSearch.GetDirectories("*" + "-delosrv");
 
+                if (ConfigDir == null || ConfigDir.Length == 0)
+                {
+                    //МБ ЭТО ТИТУЛ ?
+                    ConfigDir = hdDirectoryInWhichToSearch.GetDirectories("*" + "-titulsrv");
+                }
+
                 FileInfo? fileInfo = new FileInfo(ConfigDir[0].FullName + "\\a\\Settings");
 
                 string? directoryPath = fileInfo.FullName;
