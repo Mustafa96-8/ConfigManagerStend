@@ -41,6 +41,11 @@ namespace ConfigManagerStend.Infrastructure.Services
                     DirectoryInfo hdDirectoryInWhichToSearch = new DirectoryInfo($"{stand.Path}\\config\\");
                     DirectoryInfo[] ConfigDir = hdDirectoryInWhichToSearch.GetDirectories("*" + "-delosrv");
 
+                    if (ConfigDir == null || ConfigDir.Length == 0)
+                    {
+                        //МБ ЭТО ТИТУЛ ?
+                        ConfigDir = hdDirectoryInWhichToSearch.GetDirectories("*" + "-titulsrv");
+                    }
                     if (File.Exists(ConfigDir[0].FullName + "\\a\\appsettings.json"))
                     {
                         // Читаем содержимое файла настроек
