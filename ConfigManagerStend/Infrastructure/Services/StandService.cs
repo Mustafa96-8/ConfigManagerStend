@@ -21,7 +21,7 @@ namespace ConfigManagerStend.Infrastructure.Services
         {
             using (var db = new AppDbContext())
             {
-                return await db.Stands.Include(s => s.Modules).ThenInclude(m => m.Status).ToListAsync();
+                return await db.Stands.Include(s => s.Modules).ThenInclude(m => m.Status).OrderBy(s => s.AppPort).ToListAsync();
             }
         }
 
@@ -32,20 +32,24 @@ namespace ConfigManagerStend.Infrastructure.Services
         {
             using (var db = new AppDbContext())
             {
-                List<Stand> standList = await db.Stands.Include(s => s.Modules).ThenInclude(m => m.Status).ToListAsync();
+                List<Stand> standList = await db.Stands.Include(s => s.Modules).ThenInclude(m => m.Status).OrderBy(s => s.AppPort).ToListAsync();
 
                 PdConfigStatus status = new();
 
                 foreach (Stand stand in standList)
                 {
                     DirectoryInfo hdDirectoryInWhichToSearch = new DirectoryInfo($"{stand.Path}\\config\\");
-                    DirectoryInfo[] ConfigDir = hdDirectoryInWhichToSearch.GetDirectories("*" + "-delosrv");
+                    DirectoryInfo[] ConfigDir = hdDirectoryInWhichToSearch.GetDirectories("*" + "-" + "*" + "srv");
 
-                    if (ConfigDir == null || ConfigDir.Length == 0)
-                    {
-                        //МБ ЭТО ТИТУЛ ?
-                        ConfigDir = hdDirectoryInWhichToSearch.GetDirectories("*" + "-titulsrv");
-                    }
+                    var iisSrvName = ConfigDir[0].Name + "-a";
+                    if (stand.IisSrvName != iisSrvName)
+                        stand.IisSrvName = iisSrvName;
+                    
+                    var iisWebName = ConfigDir[0].Name.TrimEnd("srv").ToString() + "web";
+                    if (stand.IisWebName != iisWebName)
+                        stand.IisWebName = iisWebName;
+
+
                     if (File.Exists(ConfigDir[0].FullName + "\\a\\appsettings.json"))
                     {
                         // Читаем содержимое файла настроек
@@ -105,20 +109,20 @@ namespace ConfigManagerStend.Infrastructure.Services
 
                 DirectoryInfo hdDirectoryInWhichToSearch = new DirectoryInfo($"{path}\\config\\");
 
-                DirectoryInfo[] ConfigDir = hdDirectoryInWhichToSearch.GetDirectories("*" + "-delosrv");
+                DirectoryInfo[] ConfigDir = hdDirectoryInWhichToSearch.GetDirectories("*" + "-"+"*"+"srv");
+                
+                if (ConfigDir==null || ConfigDir.Length == 0)
+                    return Statuses.PathNotFound($"{path}\\config\\APPNAME-srv");
 
-                if (ConfigDir == null || ConfigDir.Length == 0)
-                {
-                    //МБ ЭТО ТИТУЛ ?
-                    ConfigDir = hdDirectoryInWhichToSearch.GetDirectories("*" + "-titulsrv");
-                }
+                var iisSrvName = ConfigDir[0].Name + "-a";
+                var iisWebName = ConfigDir[0].Name.TrimEnd("srv").ToString() + "web" ;
 
                 var aFolder = ConfigDir[0].FullName + "\\a\\";
 
                 if (!File.Exists(aFolder + "appsettings.json"))
                     return Statuses.FileNotFound(aFolder + "appsettings.json");
 
-                Stand stand = new(path, aFolder);
+                Stand stand = new(path, aFolder, iisSrvName, iisWebName);
                 try
                 {
                     // Читаем содержимое файла настроек

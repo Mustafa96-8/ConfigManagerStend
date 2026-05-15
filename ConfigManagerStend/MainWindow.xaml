@@ -17,8 +17,8 @@
         </StackPanel>
         <Grid Grid.Row="1" Margin="5">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="7*"/>
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
@@ -34,7 +34,7 @@
                     </Grid.ColumnDefinitions>
                     <Label Grid.Column="0" FontSize="16" FontWeight="SemiBold" Content="Стенды:"/>
                     <Button Grid.Column="1" VerticalAlignment="Bottom" x:Name="RefreshStandList" Click="RefreshStandList_Click" Width="22" Height="22">
-                        <Image Source="shared\icon-refresh.png" Width="18" Height="18"/>
+                        <Image Source="shared\icon-refresh.png" Width="14" Height="14"/>
                     </Button>
                 </Grid>
                 <ListView Grid.Row="1" x:Name="StandListView" ItemsSource="{Binding Stands}" SelectedItem="{Binding SelectedStand}" Margin="5,1,5,1"  MinHeight="200">
@@ -45,7 +45,7 @@
                         </ContextMenu>
                     </ListView.ContextMenu>
                     <ListView.View>
-                        <GridView>
+                        <GridView AllowsColumnReorder="True">
                             <GridViewColumn Header="Порт" DisplayMemberBinding="{Binding Path=AppPort}"/>
                             <GridViewColumn Header="Стенд" DisplayMemberBinding="{Binding Path=Name}" Width="Auto"/>
                             <GridViewColumn Header="Дата обновления" DisplayMemberBinding="{Binding Path=UpdatedAt}"/>
@@ -63,62 +63,140 @@
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0">
-                    <StackPanel Orientation="Horizontal">
-                        <Label FontSize="16" FontWeight="SemiBold" Content="Информация о стенде:"/>
-                        <Label x:Name="standName" Content="{Binding SelectedStand.Name}" FontSize="16" FontWeight="SemiBold" Margin="2"/>
-                        <TextBlock Margin="10">
-                            <Hyperlink NavigateUri="{Binding SelectedStand.AppUrl}" RequestNavigate="Hyperlink_RequestNavigate">
-                                🌐 <Run Text="{Binding SelectedStand.AppUrl}"/>
-                            </Hyperlink>
-                        </TextBlock>
-
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="165"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <StackPanel Orientation="Horizontal">
+                            <Label FontSize="16" FontWeight="SemiBold" Content="Информация о стенде:"/>
+                            <Label x:Name="standName" Content="{Binding SelectedStand.Name}" FontSize="16" FontWeight="SemiBold" Margin="2"/>
+                            <TextBlock Margin="10">
+                                <Hyperlink NavigateUri="{Binding SelectedStand.AppUrl}" RequestNavigate="Hyperlink_RequestNavigate">
+                                    🌐 <Run Text="{Binding SelectedStand.AppUrl}"/>
+                                </Hyperlink>
+                            </TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Версия стенда:" Margin="1"/>
+                            <Label x:Name="standVersion" Content="{Binding SelectedStand.Version}" Margin="1"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Поставщик БД:" Margin="1"/>
+                            <Label x:Name ="standDbProvider" Content="{Binding SelectedStand.DbProvider}" Margin="1"/>
+                            <Label Content=" Владелец БД:" Margin="1"/>
+                            <Label Content="{Binding SelectedStand.DbOwner}" Margin="1"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Название приложения:" Margin="1"/>
+                            <Label Content="{Binding SelectedStand.AppName}" Margin="1"/>
+                        </StackPanel>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Версия стенда:" Margin="1"/>
-                        <Label x:Name="standVersion" Content="{Binding SelectedStand.Version}" Margin="1"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Поставщик БД:" Margin="1"/>
-                        <Label x:Name ="standDbProvider" Content="{Binding SelectedStand.DbProvider}" Margin="1"/>
-                        <Label Content=" Владелец БД:" Margin="1"/>
-                        <Label Content="{Binding SelectedStand.DbOwner}" Margin="1"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Название приложения:" Margin="1"/>
-                        <Label Content="{Binding SelectedStand.AppName}" Margin="1"/>
-                    </StackPanel>
-                    <Grid Margin="0,0,2,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="22"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" FontSize="11" FontWeight="SemiBold" Content="Подключенные модули:"/>
-                        <Button Grid.Column="1" VerticalAlignment="Bottom" IsEnabled="{Binding IsStandSelected}" x:Name="RefreshListViewBtn" Width="22" Height="22" Click="RefreshListViewBtn_Click">
-                            <Image Source="shared\icon-refresh.png" Width="18" Height="18" />
-                        </Button>
-                    </Grid>
-                </StackPanel>
-                    <ListView Grid.Row="1" IsEnabled="{Binding IsStandSelected}" x:Name="ModuleListView"  ItemsSource="{Binding AllModules}" SelectedItem="{Binding SelectedModule}" Margin="2">
-                        <ListView.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="Показать в проводнике" Command="{Binding OpenModuleInFloder}"/>
-                                <MenuItem Header="Удалить" Command="{Binding DeleteModuleCommand}"/>
-                            </ContextMenu>
-                        </ListView.ContextMenu>
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="Название" DisplayMemberBinding="{Binding Path=FileName}"/>
-                                <GridViewColumn Header="Дата подмены" DisplayMemberBinding="{Binding Path=DateFileReplacement}"/>
-                                <GridViewColumn Header="Статус" DisplayMemberBinding="{Binding Path=Status.Name}"/>
-                                <GridViewColumn Header="Последняя проверка" DisplayMemberBinding="{Binding Path=DateFileVerifiedToExist}"/>
-                            </GridView>
-                        </ListView.View>  
-                    </ListView>
-                <Grid Grid.Row="2">
+                    <Border Grid.Column="1" BorderBrush="Black" BorderThickness="0.7">
+                        <StackPanel >
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="30"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" HorizontalAlignment="Center" Content="IIS Control Panel:" Margin="1"/>
+                                <Button Grid.Column="1" IsEnabled="{Binding IsStandSelected}" x:Name="RefreshIisStatus" 
+                                        Click="RefreshIisStatusBtn_Click" HorizontalAlignment="Stretch" Margin="2"  Width="22" Height="22">
+                                    <Image Source="/shared/icon-refresh.png" Width="14" Height="14" />
+                                </Button>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" >
+                                    <Label FontSize="9" Content="Pool" Padding="4,0"/>
+                                    <Label FontSize="9" Content="Site" Padding="4,0"/>
+                                </StackPanel>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label HorizontalAlignment="Right" Content="Web:" Margin="1"/>
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" >
+                                    <Ellipse Height="18" StrokeThickness="0.5" Stroke="Black" Fill="{Binding WebPoolStatusColor, Mode=TwoWay}" Width="18" Margin="2"/>
+                                    <Ellipse Height="18" StrokeThickness="0.5" Stroke="Black" Fill="{Binding WebSiteStatusColor, Mode=TwoWay}" Width="18" Margin="2"/>
+                                    <Button VerticalAlignment="Center"  IsEnabled="{Binding IsStandSelected}" x:Name="StartWeb"
+                                        Click="StartWebBtn_Click" HorizontalAlignment="Stretch" Margin="2"  Width="22" Height="22">
+                                        <Image Source="shared\icon-play.png"  Width="10" Height="10" />
+                                    </Button>
+                                    <Button VerticalAlignment="Center"  IsEnabled="{Binding IsStandSelected}" x:Name="StopWeb"
+                                        Click="StopWebBtn_Click" HorizontalAlignment="Stretch" Margin="2" Width="22" Height="22">
+                                        <Image Source="/shared/icon-stop.png"  Width="16" Height="16" />
+                                    </Button>
+                                    <!--<Button VerticalAlignment="Center"  IsEnabled="{Binding IsStandSelected}" x:Name="RestartWeb" 
+                                        Click="RestartWebBtn_Click" HorizontalAlignment="Stretch" Margin="2"  Width="22" Height="22">
+                                        <Image Source="/shared/icon-refresh.png" Width="14" Height="14" />
+                                    </Button>-->
+                                </StackPanel>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label HorizontalAlignment="Right" Content="Srv:" Margin="1"/>
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" >
+                                    <Ellipse Height="18" StrokeThickness="0.5" Stroke="Black" Fill="{Binding SrvPoolStatusColor, Mode=TwoWay}" Width="18" Margin="2"/>
+                                    <Ellipse Height="18" StrokeThickness="0.5" Stroke="Black" Fill="{Binding SrvSiteStatusColor, Mode=TwoWay}" Width="18" Margin="2"/>
+                                    <Button VerticalAlignment="Center"  IsEnabled="{Binding IsStandSelected}" x:Name="StartSrv"
+                                        Click="StartSrvBtn_Click" HorizontalAlignment="Stretch" Margin="2"  Width="22" Height="22">
+                                        <Image Source="shared\icon-play.png"  Width="10" Height="10" />
+                                    </Button>
+                                    <Button VerticalAlignment="Center"  IsEnabled="{Binding IsStandSelected}" x:Name="StopSrv"
+                                        Click="StopSrvBtn_Click" HorizontalAlignment="Stretch" Margin="2" Width="22" Height="22">
+                                        <Image Source="/shared/icon-stop.png"  Width="16" Height="16" />
+                                    </Button>
+                                    <!--<Button VerticalAlignment="Center"  IsEnabled="{Binding IsStandSelected}" x:Name="RestartSrv" 
+                                        Click="RestartSrvBtn_Click" HorizontalAlignment="Stretch" Margin="2"  Width="22" Height="22">
+                                        <Image Source="/shared/icon-refresh.png" Width="14" Height="14" />
+                                    </Button>-->
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+                
+                <Grid Grid.Row="1" Margin="0,0,2,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="22"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" FontSize="11" FontWeight="SemiBold" Content="Подключенные модули:"/>
+                    <Button Grid.Column="1" VerticalAlignment="Bottom" IsEnabled="{Binding IsStandSelected}" x:Name="RefreshListViewBtn" Width="22" Height="22" Click="RefreshListViewBtn_Click">
+                        <Image Source="/shared/icon-refresh.png" Width="14" Height="14" />
+                    </Button>
+                </Grid>
+                <ListView Grid.Row="2" IsEnabled="{Binding IsStandSelected}" x:Name="ModuleListView"  ItemsSource="{Binding AllModules}" SelectedItem="{Binding SelectedModule}" Margin="2">
+                    <ListView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Показать в проводнике" Command="{Binding OpenModuleInFloder}"/>
+                            <MenuItem Header="Удалить" Command="{Binding DeleteModuleCommand}"/>
+                        </ContextMenu>
+                    </ListView.ContextMenu>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Название" DisplayMemberBinding="{Binding Path=FileName}"/>
+                            <GridViewColumn Header="Дата подмены" DisplayMemberBinding="{Binding Path=DateFileReplacement}"/>
+                            <GridViewColumn Header="Статус" DisplayMemberBinding="{Binding Path=Status.Name}"/>
+                            <GridViewColumn Header="Последняя проверка" DisplayMemberBinding="{Binding Path=DateFileVerifiedToExist}"/>
+                        </GridView>
+                    </ListView.View>  
+                </ListView>
+                <Grid Grid.Row="3">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="40"/>
                     </Grid.RowDefinitions>

@@ -1,25 +1,8 @@
-﻿using ConfigManagerStend.Domain;
-using ConfigManagerStend.Domain.Entities;
-using ConfigManagerStend.Forms;
+﻿using ConfigManagerStend.Forms;
 using ConfigManagerStend.Infrastructure.Commands;
-using ConfigManagerStend.Logic;
-using ConfigManagerStend.Models;
-using Microsoft.Win32;
-using Microsoft.WindowsAPICodePack.Dialogs;
-using System;
-using System.IO;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using ConfigManagerStend.Infrastructure.Enums;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 namespace ConfigManagerStend
 {
     public partial class MainWindow : Window
@@ -49,6 +32,35 @@ namespace ConfigManagerStend
         private void RefreshStandList_Click(object sender, RoutedEventArgs e)
         {
             _detailsCommand.UpdateGlobalDisplay();
+        }
+
+        private void StartWebBtn_Click(object sender, RoutedEventArgs e)
+        {
+            _detailsCommand.DoIISCommand(IssAppType.Web, IssCommands.Start);
+        }
+        private void StartSrvBtn_Click(object sender, RoutedEventArgs e)
+        {
+            _detailsCommand.DoIISCommand(IssAppType.Srv,IssCommands.Start);
+        }
+        private void RestartWebBtn_Click(object sender, RoutedEventArgs e)
+        {
+            _detailsCommand.DoIISCommand(IssAppType.Web, IssCommands.Restart);
+        }
+        private void RestartSrvBtn_Click(object sender, RoutedEventArgs e)
+        {
+            _detailsCommand.DoIISCommand(IssAppType.Srv,IssCommands.Restart);
+        }
+        private void StopWebBtn_Click(object sender, RoutedEventArgs e)
+        {
+            _detailsCommand.DoIISCommand(IssAppType.Web, IssCommands.Stop);
+        }
+        private void StopSrvBtn_Click(object sender, RoutedEventArgs e)
+        {
+            _detailsCommand.DoIISCommand(IssAppType.Srv, IssCommands.Stop);
+        }
+        private void RefreshIisStatusBtn_Click(object sender, RoutedEventArgs e)
+        {
+            _detailsCommand.UpdateIISStatus();
         }
 
         private void RefreshListViewBtn_Click(object sender, RoutedEventArgs e)

@@ -64,6 +64,32 @@ namespace ConfigManagerStend.Infrastructure.Commands
             get { return selectedModule; }
         }
 
+        private string webPoolStatusColor = "gray";
+        public string WebPoolStatusColor
+        {
+            set { webPoolStatusColor = value; NotifyPropertyChanged(nameof(WebPoolStatusColor)); }
+            get { return webPoolStatusColor; }
+        }
+        private string webSiteStatusColor = "gray";
+        public string WebSiteStatusColor
+        {
+            set { webSiteStatusColor = value; NotifyPropertyChanged(nameof(WebSiteStatusColor)); }
+            get { return webSiteStatusColor; }
+        }
+
+        private string srvPoolStatusColor = "gray";
+        public string SrvPoolStatusColor
+        {
+            set { srvPoolStatusColor = value; NotifyPropertyChanged(nameof(SrvPoolStatusColor)); }
+            get { return srvPoolStatusColor; }
+        }
+        private string srvSiteStatusColor = "gray";
+        public string SrvSiteStatusColor
+        {
+            set { srvSiteStatusColor = value; NotifyPropertyChanged(nameof(SrvSiteStatusColor)); }
+            get { return srvSiteStatusColor; }
+        }
+
         #endregion
 
 
@@ -136,6 +162,26 @@ namespace ConfigManagerStend.Infrastructure.Commands
         {
             MessageView msView = new(message);
             OpenWindowCS(msView);
+        }
+        public void DoIISCommand(IssAppType type,IssCommands command)
+        {
+            if (IsStandSelected)
+            {
+                Status result = Statuses.Ok();
+                if (type == IssAppType.Web)
+                {
+                    result = IISCommandExecutor.DoIISCommand(command, selectedStand!.IisWebName);
+                }
+                if (type == IssAppType.Srv)
+                {
+                    result = IISCommandExecutor.DoIISCommand(command, selectedStand!.IisSrvName);
+                }
+                if (result.ToString() != Statuses.Ok().ToString()) 
+                {
+                    ShowMessageToUser(result.ToString());
+                }
+                UpdateIISStatus();
+            }
         }
         #endregion
 
@@ -257,6 +303,7 @@ namespace ConfigManagerStend.Infrastructure.Commands
         {
             if (UpdateFromDb)
                 LoadModulesAsync().Wait();
+            UpdateIISStatus();
             MainWindow.AllModules.ItemsSource = null;
             SelectedModule = null;
             MainWindow.AllModules.Items.Clear();
@@ -276,7 +323,28 @@ namespace ConfigManagerStend.Infrastructure.Commands
             MainWindow.AllStands.ItemsSource = Stands;
             MainWindow.AllModules.ItemsSource = AllModules;
             MainWindow.AllStands.Items.Refresh();
+            WebPoolStatusColor = "gray";
+            WebSiteStatusColor = "gray";
+            SrvPoolStatusColor = "gray";
+            SrvSiteStatusColor = "gray";
         }
+
+        internal void UpdateIISStatus()
+        {
+            try
+            {
+                var iisStatus = IISCommandExecutor.GetStatus(selectedStand!.IisWebName, selectedStand!.IisSrvName);
+                WebPoolStatusColor = iisStatus.WebPoolStatusColor;
+                WebSiteStatusColor = iisStatus.WebSiteStatusColor;
+                SrvPoolStatusColor = iisStatus.SrvPoolStatusColor;
+                SrvSiteStatusColor = iisStatus.SrvSiteStatusColor;
+            }
+            catch(Exception ex) 
+            {
+                ShowMessageToUser(Statuses.IisError(ex.Message).ToString());
+            }
+        }
+
         private void GlobalNullValueProp()
         {
             SelectedModule = null;
