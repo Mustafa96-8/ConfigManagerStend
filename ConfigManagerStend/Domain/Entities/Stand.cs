@@ -29,6 +29,16 @@ namespace ConfigManagerStend.Domain.Entities
         public string SrvAFolderPath { get; set; }
 
         /// <summary>
+        /// Название пула и сайта для Бека
+        /// </summary>
+        public string IisSrvName {  get; set; }
+
+        /// <summary>
+        /// Название пула и сайта для Фронта
+        /// </summary>
+        public string IisWebName { get; set; }
+
+        /// <summary>
         /// Версия стенда
         /// </summary>
         public string Version { get; set; } = string.Empty;
@@ -73,11 +83,13 @@ namespace ConfigManagerStend.Domain.Entities
         /// </summary>
         public List<ExternalModule> Modules { get; set; } = new List<ExternalModule>();
 
-        public Stand(string path,string srvAFolderPath)
+        public Stand(string path,string srvAFolderPath, string iisSrvName, string iisWebName)
         {
             Name = path.Split("\\", StringSplitOptions.RemoveEmptyEntries).Last();
             Path = path;
             SrvAFolderPath = srvAFolderPath;
+            IisSrvName = iisSrvName;
+            IisWebName = iisWebName;
         }
     }
 }
